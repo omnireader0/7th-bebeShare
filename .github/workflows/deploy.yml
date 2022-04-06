@@ -1,0 +1,32 @@
+name: bebeShare deploy
+
+on:
+  push:
+    branches: [ develop , main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: java setup
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: deploy to heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: 5fcb9b2b-db25-41f5-80b1-c1da5f3fbd1d
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: blood_nail@naver.com
+
+
+
+
+
+

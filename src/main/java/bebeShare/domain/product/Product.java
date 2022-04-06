@@ -3,7 +3,8 @@ package bebeShare.domain.product;
 
 import bebeShare.BaseEntity;
 import bebeShare.domain.user.User;
-import bebeShare.web.dto.ProductCreateRequestDto;
+import bebeShare.web.dto.productDto.ProductCreateRequestDto;
+import bebeShare.web.dto.productDto.ProductDeleteDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,7 +46,9 @@ public class Product extends BaseEntity {
 
 
     @Builder
-    public Product(User user, String productName, String productContent,String productImage1, String productImage2, String productImage3, String productStatus, String productCategory ,String deleteYn) {
+    public Product(User user, String productName, String productContent,String productImage1, String productImage2, String productImage3, String productStatus, String productCategory ,String deleteYn
+    ,Long shareId) {
+
         this.user = user;
         this.productName = productName;
         this.productContent = productContent;
@@ -64,7 +67,6 @@ public class Product extends BaseEntity {
         user.getProducts().add(this);
     }
 
-
     public void update(ProductCreateRequestDto pro) {
         this.id = pro.getProductId();
         this.user = pro.getUser();
@@ -75,6 +77,10 @@ public class Product extends BaseEntity {
         this.productImage1 = pro.getProductImage1();
         this.productStatus = pro.getProductStatus();
         this.productCategory = pro.getProductCategory();
+    }
+
+    public void delete(ProductDeleteDto pro){
+        this.deleteYn = pro.getDeleteYn();
     }
 
 }

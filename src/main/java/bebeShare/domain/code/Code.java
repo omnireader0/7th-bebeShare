@@ -1,6 +1,7 @@
 package bebeShare.domain.code;
 
 import bebeShare.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,12 @@ public class Code extends BaseEntity {
     private String codeName;
 
     private String useYn;
+
+    @Builder
+    public Code(Long id, String code, String codeName, String useYn) {
+        this.id = id;
+        this.code = code;
+        this.codeName = codeName;
+        this.useYn = useYn;
+    }
 }

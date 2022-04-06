@@ -1,7 +1,7 @@
 package bebeShare.service;
 
 import bebeShare.domain.code.CodeRepository;
-import bebeShare.web.dto.CodeResponseDto;
+import bebeShare.web.dto.codeDto.CodeResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,20 +1,13 @@
 package bebeShare.domain.user;
 
-import bebeShare.domain.posts.Posts;
-import bebeShare.domain.posts.PostsRepository;
-import bebeShare.domain.product.Product;
 import bebeShare.domain.product.ProductRepository;
-import bebeShare.web.userDto.GiveInfoResponseDto;
-import bebeShare.web.userDto.LikeInfoResponseDto;
-import bebeShare.web.userDto.MemberCommentResponseDto;
-import bebeShare.web.userDto.ShareInfoResponseDto;
+import bebeShare.web.dto.userDto.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,35 +34,57 @@ public class UserRepositoryTest {
 
     }
 
-//    @Test
-//    public void 나눔한내역조회() {
-//        List<ShareInfoResponseDto> products = userRepository.shareInfo(1L,"C");
-//        for (ShareInfoResponseDto shareInfo : products) {
-//            System.out.println("shareInfo:" +shareInfo.toString());
-//        }
-//    }
-//
-//    @Test
-//    public void 나눔받은내역조회() {
-//        List<GiveInfoResponseDto> products = userRepository.giveInfo(3L,"C");
-//        for (GiveInfoResponseDto giveInfo : products) {
-//            System.out.println("giveInfo:" +giveInfo.toString());
-//        }
-//    }
-//
-//    @Test
-//    public void 찜목록조회() {
-//        List<LikeInfoResponseDto> products = userRepository.likeInfo(2L);
-//        for (LikeInfoResponseDto likeInfo : products) {
-//            System.out.println("likeInfo:" +likeInfo.toString());
-//        }
-//    }
-//
-//    @Test
-//    public void 댓글목록조회() {
-//        List<MemberCommentResponseDto> products = userRepository.comments(3L);
-//        for (MemberCommentResponseDto comment : products) {
-//            System.out.println("comment:" +comment.toString());
-//        }
-//    }
+    @Test
+    public void 나눔한내역조회() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setMemberId(1L);
+        userRequest.setProductStatus("S");
+        userRequest.setPage(0);
+        userRequest.setSize(5);
+
+        List<ShareInfoResponseDto> products = userRepository.shareInfo(userRequest);
+        for (ShareInfoResponseDto shareInfo : products) {
+            System.out.println("shareInfo:" +shareInfo.toString());
+        }
+    }
+
+    @Test
+    public void 나눔받은내역조회() {
+
+        UserRequest userRequest = new UserRequest();
+        userRequest.setMemberId(1L);
+        userRequest.setProductStatus("C");
+        userRequest.setPage(0);
+        userRequest.setSize(5);
+
+        List<GiveInfoResponseDto> products = userRepository.giveInfo(userRequest);
+        for (GiveInfoResponseDto giveInfo : products) {
+            System.out.println("giveInfo:" +giveInfo.toString());
+        }
+    }
+
+    @Test
+    public void 찜목록조회() {
+
+        UserRequest userRequest = new UserRequest();
+        userRequest.setMemberId(1L);
+        userRequest.setPage(0);
+        userRequest.setSize(5);
+        List<LikeInfoResponseDto> products = userRepository.likeInfo(userRequest);
+        for (LikeInfoResponseDto likeInfo : products) {
+            System.out.println("likeInfo:" +likeInfo.toString());
+        }
+    }
+
+    @Test
+    public void 댓글목록조회() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setMemberId(1L);
+        userRequest.setPage(0);
+        userRequest.setSize(5);
+        List<MemberCommentResponseDto> products = userRepository.comments(userRequest);
+        for (MemberCommentResponseDto comment : products) {
+            System.out.println("comment:" +comment.toString());
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package bebeShare.domain.like;
 
 
+import bebeShare.BaseEntity;
 import bebeShare.domain.product.Product;
 import bebeShare.domain.user.User;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Dibs {
+public class Dibs extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

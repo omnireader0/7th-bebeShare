@@ -1,12 +1,13 @@
-package bebeShare.web.dto;
+package bebeShare.web.dto.codeDto;
 
 import bebeShare.domain.code.Code;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
 @Getter
 public class CodeResponseDto {
     private Long codeId;

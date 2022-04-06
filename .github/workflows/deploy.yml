@@ -23,7 +23,7 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKUAPIKEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_email: blood_nail@naver.com
 
 
 

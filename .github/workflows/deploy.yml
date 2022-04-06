@@ -1,4 +1,4 @@
-name: bebeShare Deploy
+name: bebeShare deploy
 
 on:
   push:

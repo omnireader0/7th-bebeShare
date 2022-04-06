@@ -1,0 +1,30 @@
+
+# active profile
+spring:
+  profiles:
+    activate:
+      on-profile: local
+
+  # DB
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://211.105.66.96:3306/bebeShare
+    username: bebeShare
+    password: fW1*n[IQQM
+  # JPA
+  jpa:
+    show-sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+  #REDIS
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    session:
+      store-type: redis
+      redis:
+        flush-mode: on_save
+

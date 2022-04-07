@@ -65,7 +65,9 @@
 </p>
 
 ## 🛠 기획 및 설계
-- [DB 명세서](https://lean-owner-437.notion.site/DB-dc8f9dfa82504658b3324594b1e9f214)
+- [DB 명세서](https://lean-owner-437.notion.site/DB-dc8f9dfa82504658b3324594b1e9f214)  
+![db800x715](https://user-images.githubusercontent.com/48271665/162228879-9fa529cc-c351-4397-92c7-673392d27cbf.png)
+
 - [API 명세서](https://lean-owner-437.notion.site/API-90cc212689ad4070b10fa83f822301bf)
 
 

@@ -21,8 +21,9 @@ spring:
 
   #REDIS
   redis:
-    host: 127.0.0.1
-    port: 6379
+    host: ec2-18-205-76-248.compute-1.amazonaws.com
+    port: 26500
+    password: pae39b99f39db2c0e45ff88155be2bfd0445aa604c574ce084b84baf3b12e436d
     session:
       store-type: redis
       redis:

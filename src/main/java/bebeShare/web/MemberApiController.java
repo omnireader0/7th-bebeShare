@@ -37,7 +37,6 @@ public class MemberApiController {
 
     @GetMapping("/likeInfo")
     public List<LikeInfoResponseDto> likeInfo(@RequestBody UserRequest userRequest) {
-        PageRequest pageRequest = PageRequest.of(userRequest.getPage(), userRequest.getSize());
         return userService.likeInfo(userRequest);
     }
 

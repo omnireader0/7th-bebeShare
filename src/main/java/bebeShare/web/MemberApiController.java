@@ -34,17 +34,14 @@ public class MemberApiController {
         return userService.giveInfo(userRequest);
     }
 
-
     @GetMapping("/likeInfo")
     public List<LikeInfoResponseDto> likeInfo(@RequestBody UserRequest userRequest) {
-        PageRequest pageRequest = PageRequest.of(userRequest.getPage(), userRequest.getSize());
         return userService.likeInfo(userRequest);
     }
 
 
     @GetMapping("/comments")
     public List<MemberCommentResponseDto> comments(@RequestBody UserRequest userRequest) {
-        PageRequest pageRequest = PageRequest.of(userRequest.getPage(), userRequest.getSize());
         return userService.comments(userRequest);
     }
 

@@ -2,7 +2,11 @@ package bebeShare.web.dto.productDto;
 
 import bebeShare.domain.product.Product;
 import bebeShare.domain.user.User;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+
 
 @Getter
 public class ProductResponseDto {

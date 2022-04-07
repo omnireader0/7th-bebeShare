@@ -4,9 +4,9 @@ import bebeShare.domain.product.Product;
 import bebeShare.domain.product.ProductRepository;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
-import bebeShare.web.dto.productDto.ProductCreateRequestDto;
-import bebeShare.web.dto.productDto.ProductDeleteDto;
-import bebeShare.web.dto.productDto.ProductResponseDto;
+import bebeShare.web.dto.productDto.*;
+import bebeShare.web.dto.userDto.ShareInfoResponseDto;
+import bebeShare.web.dto.userDto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -31,12 +31,19 @@ public class ProductService {
     }
 
     // 게시글 목록 조회
-    public List<ProductResponseDto> findAll() {
+//    public List<ProductResponseDto> findAll() {
+//
+//        Sort sort = Sort.by(Sort.Direction.DESC, "id", "createdDate");
+//        List<Product> list = productRepository.findAll(sort);
+//        return list.stream().map(ProductResponseDto::new).collect(Collectors.toList());
+//    }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "id", "createdDate");
-        List<Product> list = productRepository.findAll(sort);
-        return list.stream().map(ProductResponseDto::new).collect(Collectors.toList());
+    // 상품 게시글 목록 조회
+    public List<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest) {
+        return productRepository.findAllProducts(productRequest);
+
     }
+
 
     // 상품 게시글 상세 조회
     public ProductResponseDto findById(Long productId) {

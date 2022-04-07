@@ -3,9 +3,8 @@ package bebeShare.web;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import bebeShare.service.ProductService;
-import bebeShare.web.dto.productDto.ProductCreateRequestDto;
-import bebeShare.web.dto.productDto.ProductDeleteDto;
-import bebeShare.web.dto.productDto.ProductResponseDto;
+import bebeShare.web.dto.productDto.*;
+import bebeShare.web.dto.userDto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +23,10 @@ public class ProductApiController {
         return productService.save(params);
     }
 
-    // 상품 게시글 조회
+    // 상품 게시글 목록 조회
     @GetMapping("/products")
-    public List<ProductResponseDto> findAll() {
-        return productService.findAll();
+    public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest) {
+        return productService.findAllProducts(productRequest);
     }
 
 

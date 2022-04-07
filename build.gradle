@@ -110,3 +110,7 @@ configurations {
     querydsl.extendsFrom compileClasspath
 }
 //querydsl 추가 끝
+bootJar {
+    archivesBaseName='bebeShare'
+    archiveFileName='7th-bebeShare-0.0.1-SNAPSHOT.jar'
+}

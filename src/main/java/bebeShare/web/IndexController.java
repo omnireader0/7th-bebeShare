@@ -5,7 +5,6 @@ import bebeShare.config.auth.dto.SessionUser;
 import bebeShare.service.PostsService;
 import bebeShare.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class IndexController {
             model.addAttribute("userName", user.getName());
         }
 
-        return "index";
+        return "views/main";
     }
 
 

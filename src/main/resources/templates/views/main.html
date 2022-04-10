@@ -2,35 +2,46 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/default">
+    layout:decorate="~{layouts/layout}">
 <head>
+
+    <th:block layout:fragment="css">
+        <style th:inline="css">
+            .float {
+                position: fixed;
+                width: 60px;
+                height: 60px;
+                bottom: 40px;
+                right: 40px;
+                background-color: blue;
+                color: black;
+                border-radius: 50px;
+                text-align: center;
+                box-shadow: 2px 2px 3px #999;
+            }
+
+            .my-float {
+                margin-top: 22px;
+            }
+
+            .card-img-top {
+                height: 200px;
+                width: 100%;
+            }
+        </style>
+    </th:block>
+    <th:block layout:fragment="script">
+
+        <script>
+            // alert("hello.html");
+        </script>
+    </th:block>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>배배쉐어</title>
-    <style>
-        .float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: blue;
-            color: black;
-            border-radius: 50px;
-            text-align: center;
-            box-shadow: 2px 2px 3px #999;
-        }
 
-        .my-float {
-            margin-top: 22px;
-        }
 
-        .card-img-top {
-            height: 200px;
-            width: 100%;
-        }
-    </style>
 </head>
 
 <div layout:fragment="content">

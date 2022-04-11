@@ -51,4 +51,38 @@ public class IndexController {
         postsService.delete(id);
         return id;
     }
+
+
+    @GetMapping("/product/detail")
+    public String detailProduct(Model model ,  @LoginUser SessionUser user) {
+
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+
+        return "product/detail";
+    }
+
+    @GetMapping("/product/register")
+    public String registerProduct(Model model ,  @LoginUser SessionUser user) {
+
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+
+        return "product/register";
+    }
+
+    @GetMapping("/user/mypage")
+    public String mypage(Model model ,  @LoginUser SessionUser user) {
+
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
+
+        return "user/mypage";
+    }
 }

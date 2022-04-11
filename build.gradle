@@ -78,6 +78,7 @@ dependencies {
 
     //view
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.webjars.bower:bootstrap:4.3.1'

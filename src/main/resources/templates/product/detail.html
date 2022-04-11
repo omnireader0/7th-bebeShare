@@ -1,9 +1,8 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <head>
-  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,8 +32,9 @@
 
 
 
-  <body>
+<th:block layout:fragment="content">
     <div class="container p-5">
+      <!-- image slider -->
       <div class="row justify-content-center">
         <div class="col-md-10">
           <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -226,9 +226,6 @@
           <!-- 댓글 -->
         </div>
       </div>
-
     </div>
-    </div>
-  </body>
-</div>
+</th:block>
 </html>

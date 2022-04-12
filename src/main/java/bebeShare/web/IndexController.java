@@ -3,6 +3,7 @@ package bebeShare.web;
 import bebeShare.config.auth.LoginUser;
 import bebeShare.config.auth.dto.SessionUser;
 import bebeShare.service.PostsService;
+import bebeShare.service.ProductService;
 import bebeShare.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ public class IndexController {
 
     private final PostsService postsService;
     private final HttpSession httpSession;
+    private final ProductService productService;
 
     @GetMapping("/")
     public String index(Model model ,  @LoginUser SessionUser user) {
@@ -27,6 +29,7 @@ public class IndexController {
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
+        model.addAttribute("products",productService.findAll());
 
         return "views/main";
     }

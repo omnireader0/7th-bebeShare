@@ -2,7 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/layout}">
+      layout:decorate="~{layouts/layout}">
 <head>
 
     <th:block layout:fragment="css">
@@ -31,8 +31,45 @@
         </style>
     </th:block>
     <th:block layout:fragment="script">
-
         <script>
+
+
+
+
+
+
+
+            function selCodes(){
+
+            }
+
+            function getNotiList(code) {
+
+                var p_trans = {};
+                p_trans.pageSize = '999';
+                p_trans.pageNo = '1';
+                p_trans.noticeOrgCd = '200';
+
+                $.ajax({
+                    dataType: 'json',
+                    type: "post",
+                    contentType: "application/text;charset=utf-8",
+                    url: V_CONTEXT+'/community/getNotiList',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+
+                    data: JSON.stringify(p_trans),
+                    success: function(data) {
+
+
+                       },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
+            };
+
         </script>
     </th:block>
     <!-- Required meta tags -->
@@ -109,21 +146,21 @@
                 <div class="row">
                     <!-- 카드 아이템 -->
                     <th:block th:each="product  : ${products}">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-<!--                            <img class="card-img-top" th:src="${product.productImage1}"  alt="Card image cap">-->
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${product.productName}"></h5>
-                                <div class="d-flex justify-content-between ">
-                                    <p class="card-text"><small class="text-muted">5분전</small></p>
-                                    <button type="button" class="btn btn-link">
-                                        <i class="bi-heart"></i>
-                                    </button>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
+                                <!--                            <img class="card-img-top" th:src="${product.productImage1}"  alt="Card image cap">-->
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${product.productName}"></h5>
+                                    <div class="d-flex justify-content-between ">
+                                        <p class="card-text"><small class="text-muted">5분전</small></p>
+                                        <button type="button" class="btn btn-link">
+                                            <i class="bi-heart"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -137,7 +174,7 @@
         <i class="fa fa-plus my-float"></i>
     </a>
     <!--- floating button -->
-</div>
+    </div>
 
 </th:block>
 </html>

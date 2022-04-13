@@ -1,6 +1,5 @@
 package bebeShare.domain.chat;
 
-import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

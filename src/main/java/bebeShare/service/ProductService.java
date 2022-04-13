@@ -31,12 +31,11 @@ public class ProductService {
     }
 
     // 게시글 목록 조회
-//    public List<ProductResponseDto> findAll() {
-//
-//        Sort sort = Sort.by(Sort.Direction.DESC, "id", "createdDate");
-//        List<Product> list = productRepository.findAll(sort);
-//        return list.stream().map(ProductResponseDto::new).collect(Collectors.toList());
-//    }
+    public List<ProductResponseDto> findAll() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id", "createdDate");
+        List<Product> list = productRepository.findAll(sort);
+        return list.stream().map(ProductResponseDto::new).collect(Collectors.toList());
+    }
 
     // 상품 게시글 목록 조회
     public List<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest) {

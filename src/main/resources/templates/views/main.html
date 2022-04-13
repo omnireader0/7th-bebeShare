@@ -35,32 +35,24 @@
 
 
 
-
-
-
-
             function selCodes(){
 
             }
 
-            function getNotiList(code) {
+            function selProducts() {
 
-                var p_trans = {};
-                p_trans.pageSize = '999';
-                p_trans.pageNo = '1';
-                p_trans.noticeOrgCd = '200';
+                const p_trans = {};
+                p_trans.productName = "";
+                p_trans.categoryCode = '100';
 
                 $.ajax({
                     dataType: 'json',
-                    type: "post",
-                    contentType: "application/text;charset=utf-8",
-                    url: V_CONTEXT+'/community/getNotiList',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: '/api/v1/products',
                     data: JSON.stringify(p_trans),
                     success: function(data) {
+                        console.log(data)
 
 
                        },
@@ -68,7 +60,7 @@
                         console.log(e.message);
                     }
                 });
-            };
+            }
 
         </script>
     </th:block>
@@ -88,7 +80,7 @@
         <div class="d-flex justify-content-center">
             <div class="col-md-12">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="검색어를 입력하세요">
+                    <input type="text" class="form-control" placeholder="검색어를 입력하세요" id="productName">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
                     </div>

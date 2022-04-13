@@ -9,4 +9,5 @@ import lombok.ToString;
 @Setter
 public class ProductRequest {
     private String productName;
+    private String categoryCode;
 }

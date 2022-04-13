@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1")
 public class CommentApiController {
 
     private final CommentsService commentsService;
@@ -26,7 +26,7 @@ public class CommentApiController {
     }
 
     //상품 댓글 조회
-    @GetMapping("/products")
+    @GetMapping("/comments")
     public List<CommentFindAllResponseDto> findAll(){
         return commentsService.findAll();
     }

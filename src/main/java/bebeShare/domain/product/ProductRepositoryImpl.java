@@ -1,13 +1,15 @@
 package bebeShare.domain.product;
+
 import bebeShare.web.dto.productDto.ProductInfoResponseDto;
 import bebeShare.web.dto.productDto.ProductRequest;
 import bebeShare.web.dto.productDto.QProductInfoResponseDto;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-
 import javax.persistence.EntityManager;
 import java.util.List;
+
 import static bebeShare.domain.product.QProduct.product;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
@@ -29,14 +31,24 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         product.createdDate.as("insertDt")
                 ))
                 .where(
-                        productNameEq(productRequest.getProductName())
+                        productNameEq(productRequest.getProductName()),
+                        productCategoryEq(productRequest.getCategoryCode())
                 )
                 .orderBy(product.createdDate.desc())
                 .from(product)
                 .fetch();
     }
 
-    private BooleanExpression productNameEq(String productName) {
-        return product.productName.eq(productName);
+    private Predicate productCategoryEq(String categoryCode) {
+        return !categoryCode.isEmpty() ? product.productCategory.eq(categoryCode) : null;
     }
+
+    private BooleanExpression productNameEq(String productName) {
+        System.out.println("@@" + productName != null);
+        System.out.println("@@" + productName == null);
+        System.out.println("@@" + productName == "");
+        System.out.println("@@" + productName.isEmpty());
+        return !productName.isEmpty() ? product.productName.eq(productName) : null;
+    }
+
 }

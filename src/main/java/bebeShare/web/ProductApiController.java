@@ -5,11 +5,15 @@ import bebeShare.exception.ErrorCode;
 import bebeShare.service.ProductService;
 import bebeShare.web.dto.productDto.*;
 import bebeShare.web.dto.userDto.UserRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -18,14 +22,16 @@ public class ProductApiController {
     private final ProductService productService;
 
     // 상품 게시글 등록
-    @PostMapping("/products")
+    @PostMapping("/product")
     public Long save(@RequestBody final ProductCreateRequestDto params) {
         return productService.save(params);
     }
 
     // 상품 게시글 목록 조회
-    @GetMapping("/products")
+    @PostMapping(value = "/products")
     public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest) {
+        log.debug("@@@@@@@@@@@@@@");
+        log.debug("@@@@@@@@@@@@@@:{}" , productRequest.toString() );
         return productService.findAllProducts(productRequest);
     }
 

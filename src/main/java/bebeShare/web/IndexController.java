@@ -66,14 +66,12 @@ public class IndexController {
         return "product/detail";
     }
 
-    @GetMapping("/product/register")
+    @GetMapping("/products")
     public String registerProduct(Model model ,  @LoginUser SessionUser user) {
-
-
         if (user != null) {
-            model.addAttribute("userName", user.getName());
+            model.addAttribute("user", user);
+//            model.addAttribute("userName", user.getName());
         }
-
         return "product/register";
     }
 
@@ -82,6 +80,7 @@ public class IndexController {
 
 
         if (user != null) {
+
             model.addAttribute("userName", user.getName());
         }
 

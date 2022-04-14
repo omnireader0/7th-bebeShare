@@ -25,7 +25,8 @@ public class ProductService {
     //상품 게시글 생성
     @Transactional
     public Long save(final ProductCreateRequestDto params) {
-
+        System.out.println("ProductService.save");
+        System.out.println("params = " + params);
         Product entity = productRepository.save(params.toEntity());
         return entity.getId();
     }

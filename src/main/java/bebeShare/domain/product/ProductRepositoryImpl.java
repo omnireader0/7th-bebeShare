@@ -10,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static bebeShare.domain.like.QDibs.dibs;
 import static bebeShare.domain.product.QProduct.product;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
@@ -28,8 +29,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         product.id,
                         product.productName,
                         product.productImage1,
+                        dibs.Id,
                         product.createdDate.as("insertDt")
                 ))
+                .from(product)
+                .leftJoin(product.dibs , dibs)
                 .where(
                         productNameEq(productRequest.getProductName()),
                         productCategoryEq(productRequest.getCategoryCode())
@@ -44,10 +48,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private BooleanExpression productNameEq(String productName) {
-        System.out.println("@@" + productName != null);
-        System.out.println("@@" + productName == null);
-        System.out.println("@@" + productName == "");
-        System.out.println("@@" + productName.isEmpty());
         return !productName.isEmpty() ? product.productName.eq(productName) : null;
     }
 

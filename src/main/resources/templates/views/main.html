@@ -5,7 +5,6 @@
       layout:decorate="~{layouts/layout}">
 <head>
 
-    <th:block layout:fragment="css">
         <style th:inline="css">
             .float {
                 position: fixed;
@@ -28,21 +27,89 @@
                 height: 200px;
                 width: 100%;
             }
+
+            .btn-link{
+                color: #dc3545;
+            }
+            .btn btn-link{
+                color: #e6dbb9;
+            }
         </style>
-    </th:block>
-    <th:block layout:fragment="script">
-        <script>
+    <script th:inline="javascript">
+
+        $(function() {
+            selProducts();
+            selCodes();
+
+
+            $('#searchBtn').on('click', function(e) {
+                selProducts();
+            });
+
+            $("#productName").keydown(function (key) {
+
+                if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+                    selProducts();
+                }
+
+            });
+
+            $('button .btn btn-link').on('click', function(e) {
+                console.log(true)
+                console.log($(this).attr("id"));
+                if($(this).hasClass('fill')){
+                    $(this).attr('class', 'bi-heart');
+                    return 0;
+                }
+
+                $(this).attr('class','bi-heart-fill');
+
+            });
+        });
 
 
 
-            function selCodes(){
 
+
+            function selCodes() {
+
+                const p_trans = {};
+                let cHtml = '';
+                 p_trans.code = "100";
+
+                $.ajax({
+                    dataType: 'json',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: '/api/v1/categories',
+                    data: JSON.stringify(p_trans),
+                    success: function(data) {
+                        console.log("카테고리리스트:{}",data);
+                        const categories = data;
+
+                        for(var i=0; i<categories.length; i++){
+                            cHtml += '<div class="col-md-2">';
+                            cHtml += '<button type="button" class="btn btn-outline-secondary rounded-pill">'+categories[i].codeName+'</button>';
+                            cHtml += '</div>';
+
+                        }
+
+                        $('#categories').html(cHtml);
+
+
+                    },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
             }
 
             function selProducts() {
+                $('#proudcts').empty();
 
                 const p_trans = {};
-                p_trans.productName = "";
+                let pHtml = '';
+                p_trans.productName = $("#productName").val();
                 p_trans.categoryCode = '100';
 
                 $.ajax({
@@ -52,8 +119,31 @@
                     url: '/api/v1/products',
                     data: JSON.stringify(p_trans),
                     success: function(data) {
-                        console.log(data)
+                        console.log("상품리스트:{}",data);
+                        const products = data;
 
+                        for(var i=0; i<products.length; i++){
+                           let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+
+
+                            pHtml += '<div class="col-md-4">';
+                            pHtml += '  <div class="card">';
+                            pHtml += '      <img class="card-img-top" src="'+products[i].productImage1+'" alt="Card image cap" >';
+                            pHtml += '          <div class="card-body">';
+                            pHtml += '              <h5 class="card-title">'+products[i].productName+'</h5>';
+                            pHtml += '              <div class="d-flex justify-content-between ">';
+                            pHtml += '                  <p class="card-text"><small class="text-muted">'+products[i].insertDt+'</small>';
+                            pHtml += '                  <button type="button" class="btn btn-link">';
+                            pHtml += '                  <i class="'+likeYn+'" id="'+products[i].productId+'"></i>';
+                            pHtml += '                  </button>';
+                            pHtml += '              </div>';
+                            pHtml += '          </div>';
+                            pHtml += '  </div>';
+                            pHtml += '</div>';
+                        }
+
+
+                        $('#proudcts').html(pHtml);
 
                        },
                     error: function (e) {
@@ -63,7 +153,6 @@
             }
 
         </script>
-    </th:block>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,7 +170,7 @@
             <div class="col-md-12">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="검색어를 입력하세요" id="productName">
-                    <div class="input-group-append">
+                    <div class="input-group-append" id="searchBtn">
                         <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
@@ -104,7 +193,7 @@
         <!-- tag floating buttons -->
         <div class="row d-flex justify-content-center">
             <!-- 왼쪽 여백 -->
-            <div class="row col-md-12 justify-content-start">
+            <div class="row col-md-12 justify-content-start" id="categories">
                 <div class="col-md-2">
                     <button type="button" class="btn btn-outline-secondary rounded-pill">#남자아이</button>
                 </div>
@@ -135,24 +224,8 @@
         <!-- 카드 리스트 -->
         <div class="row d-flex justify-content-center" style="margin-top: 20px;">
             <div class="col-md-12">
-                <div class="row">
-                    <!-- 카드 아이템 -->
-                    <th:block th:each="product  : ${products}">
-                        <div class="col-md-4">
-                            <div class="card">
-                                <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-                                <!--                            <img class="card-img-top" th:src="${product.productImage1}"  alt="Card image cap">-->
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${product.productName}"></h5>
-                                    <div class="d-flex justify-content-between ">
-                                        <p class="card-text"><small class="text-muted">5분전</small></p>
-                                        <button type="button" class="btn btn-link">
-                                            <i class="bi-heart"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row" id="proudcts">
+
                 </div>
             </div>
         </div>

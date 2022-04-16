@@ -25,8 +25,12 @@ public class CategoryApiController {
 
 
     @PostMapping("/categories")
-    public List<CodeResponseDto> findAllCategories(@RequestBody CategoryReqeustDto categoryReqeustDto){
-        return categoryService.findByCode(categoryReqeustDto);
+    public List<CodeResponseDto> findAllCategories(){
+
+        List<CodeResponseDto> byCode = categoryService.findAll();
+
+        log.debug("@@@@@ :" + byCode.toString());
+        return byCode;
 
     }
 }

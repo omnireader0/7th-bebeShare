@@ -30,8 +30,6 @@ public class ProductApiController {
     // 상품 게시글 목록 조회
     @PostMapping(value = "/products")
     public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest) {
-        log.debug("@@@@@@@@@@@@@@");
-        log.debug("@@@@@@@@@@@@@@:{}" , productRequest.toString() );
         return productService.findAllProducts(productRequest);
     }
 

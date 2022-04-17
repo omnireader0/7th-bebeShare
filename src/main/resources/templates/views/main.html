@@ -63,7 +63,6 @@
             });
 
 
-
         });
 
 
@@ -104,6 +103,8 @@
                             $(this).css('color', 'white');
                             $(this).addClass('active');
                             $(this).attr('id', 'activeCode');
+
+                            selProducts();
                         }
                     );
                 },
@@ -121,7 +122,7 @@
             const p_trans = {};
             let pHtml = '';
             p_trans.productName = $("#productName").val();
-            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined? '' :$('#activeCode').attr('codeCt')  ;
+            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
 
             $.ajax({
                 dataType: 'json',
@@ -145,7 +146,7 @@
                         pHtml += '              <div class="d-flex justify-content-between ">';
                         pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
                         pHtml += '                  <button type="button" class="btn btn-link" id="like">';
-                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '"></i>';
+                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '" likeId="'+products[i].dibsId+'"></i>';
                         pHtml += '                  </button>';
                         pHtml += '              </div>';
                         pHtml += '          </div>';
@@ -156,13 +157,17 @@
 
                     $('#proudcts').html(pHtml);
 
-                    $('.bi-heart').click(function () {
-                            if ($(this).hasClass('fill')) {
+                    $('.card-text button i').click(function () {
+                        console.log($(this).attr('like'))
+                            if ($(this).attr('likeId') != 0) {
                                 $(this).attr('class', 'bi-heart');
+                                deleteLike($(this).attr("likeId"));
+
                                 return 0;
                             }
-
                             $(this).attr('class', 'bi-heart-fill');
+                            console.log("ture:" +$(this).attr("id"))
+                            addLike($(this).attr("id"));
                         }
                     );
 
@@ -170,6 +175,37 @@
                 error: function (e) {
                     console.log(e.message);
                 }
+            });
+        }
+
+
+        function addLike(productId) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/like/' + productId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 등록 되었습니다.');
+                selProducts();
+
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function deleteLike(likeId) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/like/' + likeId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 해제 되었습니다.');
+                selProducts();
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
             });
         }
 

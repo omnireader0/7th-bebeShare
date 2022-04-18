@@ -34,40 +34,79 @@
 
       <title>배배쉐어</title>
 
-      <th:block layout:fragment="script">
           <script>
 
 
+              $(function () {
+                  selProducts("C");
+              });
+
+
+              function selProducts(productStatus) {
+                  $('#proudcts').empty();
+
+                  // const p_trans = {};
+                  //
+                  // p_trans.productStatus = productStatus;
+                  //
+                  // $.ajax({
+                  //     dataType: 'json',
+                  //     type: "POST",
+                  //     contentType: "application/json;charset=utf-8",
+                  //     url: '/api/v1/products',
+                  //     data: JSON.stringify(p_trans),
+                  //     success: function (data) {
+                  //         console.log("상품리스트:{}", data);
+                  //         const products = data;
+                  //
+                  //         for (var i = 0; i < products.length; i++) {
+                  //
+                  //             pHtml += '<div class="col-md-4">';
+                  //             pHtml += '  <div class="card">';
+                  //             pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
+                  //             pHtml += '          <div class="card-body">';
+                  //             pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
+                  //             pHtml += '              <div class="d-flex justify-content-between ">';
+                  //             pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
+                  //             pHtml += '              </div>';
+                  //             pHtml += '          </div>';
+                  //             pHtml += '   </div>';
+                  //             pHtml += '</div>';
+                  //         }
+                  //
+                  //         $('#products').html(pHtml);
+                  //     },
+                  //     error: function (e) {
+                  //         console.log(e.message);
+                  //     }
+                  // });
+
+
+
+                  var data = {
+                      productStatus: productStatus
+                  };
+
+                  $.ajax({
+                      type: 'POST',
+                      url: '/api/v1/products',
+                      dataType: 'json',
+                      contentType: 'application/json; charset=utf-8',
+                      data: JSON.stringify(data)
+                  }).done(function (data) {
+                      console.log("상품리스트:{}", data);
+                  }).fail(function (error) {
+                      alert(JSON.stringify(error));
+                  });
+              }
+
+
+
           </script>
-      </th:block>
   </head>
 
   <th:block layout:fragment="content">
 
-    <!-- navbar -->
-    <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
-      <div class="col-md-5"></div>
-      <div class="col-md-2">
-        <a style="text-decoration:none; color: black;" href="/">
-          <h2>베베쉐어</h2>
-        </a>
-      </div>
-      <div class="col-md-3"></div>
-      <!-- 로그인 버튼 d-none을 없애면 표시된다 -->
-      <div class="col-md-2 d-none">
-        <button type="button" class="btn btn-primary" >로그인</button>
-      </div>
-      <!-- 로그인 버튼 -->
-      <!--- 프로필 이미지 -->
-      <div class="col-md-2" > 
-        <button type="button" class="btn btn-link">
-          <img class="rounded-circle w-50 h-50" alt="100x100" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg"
-          data-holder-rendered="true">
-        </button>
-      </div>
-      <!--- 프로필 이미지 -->
-    </div>
-    <!-- navbar -->
     <!-- main -->
     <div class="container pl-5 pr-5">
       <!-- user profile -->
@@ -102,10 +141,10 @@
         <div class="col-md-12">
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link active" href="#">나눔한 내역</a>
+              <a class="nav-link active" href="javascript:selProducts('C');">나눔한 내역</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">나눔받은 내역</a>
+              <a class="nav-link" href="javascript:selProducts('C');">나눔받은 내역</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">찜목록</a>
@@ -121,72 +160,20 @@
       <div name="card-list">
         <div class="row d-flex justify-content-center" style="margin-top: 20px;">
           <div class="col-md-12">
-            <div class="row">
+            <div class="row" id="products">
               <!-- 카드 아이템 -->
-              <div class="col-md-4">
-                <div class="card">
-                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap" >
-                  <div class="card-body">
-                    <h5 class="card-title">제목</h5>
-                    <div class="d-flex justify-content-between ">
-                      <p class="card-text"><small class="text-muted">5분전</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- 카드 아이템 -->
-              <!-- 카드 아이템 -->
-              <div class="col-md-4">
-                <div class="card">
-                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">제목</h5>
-                    <div class="d-flex justify-content-between ">
-                      <p class="card-text"><small class="text-muted">5분전</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- 카드 아이템 -->
-              <!-- 카드 아이템 -->
-              <div class="col-md-4">
-                <div class="card">
-                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">제목</h5>
-                    <div class="d-flex justify-content-between ">
-                      <p class="card-text"><small class="text-muted">5분전</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- 카드 아이템 -->
-              <!-- 카드 아이템 -->
-              <div class="col-md-4">
-                <div class="card">
-                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">제목</h5>
-                    <div class="d-flex justify-content-between ">
-                      <p class="card-text"><small class="text-muted">5분전</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- 카드 아이템 -->
-              <!-- 카드 아이템 -->
-              <div class="col-md-4">
-                <div class="card">
-                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">제목</h5>
-                    <div class="d-flex justify-content-between ">
-                      <p class="card-text"><small class="text-muted">5분전</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- 카드 아이템 -->
+<!--              <div class="col-md-4">-->
+<!--                <div class="card">-->
+<!--                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap" >-->
+<!--                  <div class="card-body">-->
+<!--                    <h5 class="card-title">제목</h5>-->
+<!--                    <div class="d-flex justify-content-between ">-->
+<!--                      <p class="card-text"><small class="text-muted">5분전</small></p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+                <!-- 카드리스트 종료 -->
             </div>
           </div>
         </div>
@@ -264,7 +251,6 @@
           </div>
           <!-- 댓글 -->
         </div>
-
     </div>
     </div>
   </th:block>

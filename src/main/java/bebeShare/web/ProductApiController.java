@@ -1,5 +1,7 @@
 package bebeShare.web;
 
+import bebeShare.config.auth.LoginUser;
+import bebeShare.config.auth.dto.SessionUser;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import bebeShare.service.ProductService;
@@ -29,9 +31,15 @@ public class ProductApiController {
 
     // 상품 게시글 목록 조회
     @PostMapping(value = "/products")
-    public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest) {
+    public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest, @LoginUser SessionUser sessionUser) {
+
+        if(statusCheck(productRequest)){
+            System.out.println("@@:" +sessionUser.toString());
+            productRequest.setMemberId(sessionUser.getId());
+        }
         return productService.findAllProducts(productRequest);
     }
+
 
 
     // 상품 게시글 상세 조회
@@ -58,4 +66,9 @@ public class ProductApiController {
     public void delete(@RequestBody ProductDeleteDto params){
         productService.delete(params);
     }
+
+    private boolean statusCheck(ProductRequest productRequest) {
+        return productRequest.getProductStatus() != null && productRequest.getProductStatus().equals("C");
+    }
+
 }

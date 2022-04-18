@@ -39,8 +39,14 @@ public class ProductService {
 
     // 상품 게시글 목록 조회
     public List<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest) {
-        return productRepository.findAllProducts(productRequest);
-
+        try {
+            List<ProductInfoResponseDto> products = productRepository.findAllProducts(productRequest);
+            return products;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 

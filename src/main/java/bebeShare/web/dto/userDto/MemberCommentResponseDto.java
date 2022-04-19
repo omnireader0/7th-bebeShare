@@ -24,6 +24,7 @@ public class MemberCommentResponseDto {
         this.commentId = commentId;
         this.productName   = productName;
         this.commentContent = commentContent;
+        this.insertDt = insertDt;
 
     }
 

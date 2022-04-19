@@ -3,7 +3,6 @@ package bebeShare.domain.product;
 import bebeShare.web.dto.productDto.ProductInfoResponseDto;
 import bebeShare.web.dto.productDto.ProductRequest;
 import bebeShare.web.dto.productDto.QProductInfoResponseDto;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -37,7 +36,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .leftJoin(product.dibs, dibs)
                 .where(
                         productMemberIdEq(productRequest.getMemberId()),
-                        productShareId(productRequest.getShareId()),
                         productNameEq(productRequest.getProductName()),
                         productCategoryEq(productRequest.getCategoryCode()),
                         productStatusEq(productRequest.getProductStatus())
@@ -64,7 +62,5 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return id == null ? product.user.id.isNull() : product.user.id.eq(id);
     }
 
-    private Predicate productShareId(Long shareId) {
-        return shareId == null ? product.shareId.isNull() : product.shareId.eq(shareId);
-    }
+
 }

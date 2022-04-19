@@ -38,67 +38,195 @@
 
 
               $(function () {
-                  selProducts("C");
+                  selShareInfo();
+
+                  $('.nav-link').click(function () {
+                      $('.nav-link').removeClass('active');
+                      $(this).addClass('active');
+                      }
+                  );
               });
 
 
-              function selProducts(productStatus) {
+
+
+              function selShareInfo() {
                   $('#proudcts').empty();
-
-                  // const p_trans = {};
-                  //
-                  // p_trans.productStatus = productStatus;
-                  //
-                  // $.ajax({
-                  //     dataType: 'json',
-                  //     type: "POST",
-                  //     contentType: "application/json;charset=utf-8",
-                  //     url: '/api/v1/products',
-                  //     data: JSON.stringify(p_trans),
-                  //     success: function (data) {
-                  //         console.log("상품리스트:{}", data);
-                  //         const products = data;
-                  //
-                  //         for (var i = 0; i < products.length; i++) {
-                  //
-                  //             pHtml += '<div class="col-md-4">';
-                  //             pHtml += '  <div class="card">';
-                  //             pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
-                  //             pHtml += '          <div class="card-body">';
-                  //             pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
-                  //             pHtml += '              <div class="d-flex justify-content-between ">';
-                  //             pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
-                  //             pHtml += '              </div>';
-                  //             pHtml += '          </div>';
-                  //             pHtml += '   </div>';
-                  //             pHtml += '</div>';
-                  //         }
-                  //
-                  //         $('#products').html(pHtml);
-                  //     },
-                  //     error: function (e) {
-                  //         console.log(e.message);
-                  //     }
-                  // });
+                  $('#product').removeClass("d-none");
+                  $('#comment').addClass("d-none");
 
 
-
+                  let pHtml = '';
                   var data = {
-                      productStatus: productStatus
+                      productStatus: 'C',
+
                   };
 
                   $.ajax({
                       type: 'POST',
-                      url: '/api/v1/products',
+                      url: '/api/v1/members/shareInfo',
                       dataType: 'json',
                       contentType: 'application/json; charset=utf-8',
                       data: JSON.stringify(data)
                   }).done(function (data) {
-                      console.log("상품리스트:{}", data);
+                      console.log("기부:{}", data);
+
+                      const products = data;
+
+                      for (var i = 0; i < products.length; i++) {
+                          pHtml = renderHtmlProduct(products[i])
+                      }
+
+                      $('#products').html(pHtml);
                   }).fail(function (error) {
                       alert(JSON.stringify(error));
                   });
               }
+
+              function selGiveInfo() {
+                  $('#proudcts').empty();
+                  $('#product').removeClass("d-none");
+                  $('#comment').addClass("d-none");
+
+                  let pHtml = '';
+                  var data = {
+                      productStatus: 'C',
+
+                  };
+
+                  $.ajax({
+                      type: 'POST',
+                      url: '/api/v1/members/giveInfo',
+                      dataType: 'json',
+                      contentType: 'application/json; charset=utf-8',
+                      data: JSON.stringify(data)
+                  }).done(function (data) {
+                      console.log("나눔:{}", data);
+
+                      const products = data;
+
+                      for (var i = 0; i < products.length; i++) {
+
+                          pHtml = renderHtmlProduct(products[i])
+
+                      }
+
+                      $('#products').html(pHtml);
+                  }).fail(function (error) {
+                      alert(JSON.stringify(error));
+                  });
+              }
+
+              function selLikeInfo() {
+                  $('#proudcts').empty();
+                  $('#product').removeClass("d-none");
+                  $('#comment').addClass("d-none");
+
+                  var data = {
+
+                  };
+                  let pHtml = '';
+
+                  $.ajax({
+                      type: 'POST',
+                      url: '/api/v1/members/likeInfo',
+                      dataType: 'json',
+                      contentType: 'application/json; charset=utf-8',
+                      data: JSON.stringify(data)
+                  }).done(function (data) {
+                      console.log("찜:{}", data);
+
+                      const products = data;
+
+
+                      for (var i = 0; i < products.length; i++) {
+                          pHtml = renderHtmlProduct(products[i])
+                      }
+
+                      $('#products').html(pHtml);
+                  }).fail(function (error) {
+                      alert(JSON.stringify(error));
+                  });
+              }
+
+              function selComment() {
+                  $('#proudcts').empty();
+                  $('#comment').removeClass("d-none");
+                  $('#product').addClass("d-none");
+
+                  var data = {
+
+                  };
+                  let pHtml = '';
+
+                  $.ajax({
+                      type: 'POST',
+                      url: '/api/v1/members/comments',
+                      dataType: 'json',
+                      contentType: 'application/json; charset=utf-8',
+                      data: JSON.stringify(data)
+                  }).done(function (data) {
+                      console.log("코멘트:{}", data);
+
+                      const products = data;
+
+
+                      for (var i = 0; i < products.length; i++) {
+                          pHtml = renderHtmlComeent(products[i])
+                      }
+
+                      $('#comments').html(pHtml);
+                  }).fail(function (error) {
+                      alert(JSON.stringify(error));
+                  });
+              }
+
+              function renderHtmlProduct(products) {
+
+                  let pHtml = '';
+
+                  pHtml += '<div class="col-md-4">';
+                  pHtml += '  <div class="card">';
+                  pHtml += '      <img class="card-img-top" src="' + products.productImage1 + '" alt="Card image cap" >';
+                  pHtml += '          <div class="card-body">';
+                  pHtml += '              <h5 class="card-title">' + products.productName + '</h5>';
+                  pHtml += '              <div class="d-flex justify-content-between ">';
+                  pHtml += '                  <p class="card-text"><small class="text-muted">' + products.insertDt + '</small>';
+                  pHtml += '              </div>';
+                  pHtml += '          </div>';
+                  pHtml += '   </div>';
+                  pHtml += '</div>';
+
+                  return pHtml;
+              }
+
+              function renderHtmlComeent(commnet) {
+
+                  let pHtml = '';
+
+                  pHtml += '<div class="card">';
+                  pHtml += '    <div class="card-body">';
+                  pHtml += '        <div class="row">';
+                  pHtml += '            <div class="col-md-2">';
+                  pHtml += '                <img src="'+commnet.commentId+'" class="rounded-circle img-fluid" alt="">';
+                  pHtml += '            </div>';
+                  pHtml += '            <div class="col-md-10">';
+                  pHtml += '                <div class="row">';
+                  pHtml += '                    <div class="col-md-10 justify-content-center">';
+                  pHtml += '                        <p>'+commnet.commentContent+'</p>';
+                  pHtml += '                    </div>';
+                  pHtml += '                    <div class="col-md-2 justify-content-center">';
+                  pHtml += '                        <span style="font-size: 12px;">'+commnet.insertDt+'</span>';
+                  pHtml += '                    </div>';
+                  pHtml += '                  </div>';
+                  pHtml += '                </div>';
+                  pHtml += '              </div>';
+                  pHtml += '            </div>';
+                  pHtml += '           </div>';
+
+                  return pHtml;
+              }
+
 
 
 
@@ -141,16 +269,16 @@
         <div class="col-md-12">
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link active" href="javascript:selProducts('C');">나눔한 내역</a>
+              <a class="nav-link active" href="javascript:selShareInfo();">나눔한 내역</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="javascript:selProducts('C');">나눔받은 내역</a>
+              <a class="nav-link" href="javascript:selGiveInfo();">나눔받은 내역</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">찜목록</a>
+              <a class="nav-link" href="javascript:selLikeInfo();">찜목록</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">댓글</a>
+              <a class="nav-link" href="javascript:selComment();">댓글</a>
             </li>
           </ul>
         </div>
@@ -158,39 +286,23 @@
       </div>
       <!-- 카드 리스트 -->
       <div name="card-list">
-        <div class="row d-flex justify-content-center" style="margin-top: 20px;">
+        <div class="row d-flex justify-content-center " style="margin-top: 20px;" id="product">
           <div class="col-md-12">
             <div class="row" id="products">
-              <!-- 카드 아이템 -->
-<!--              <div class="col-md-4">-->
-<!--                <div class="card">-->
-<!--                  <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap" >-->
-<!--                  <div class="card-body">-->
-<!--                    <h5 class="card-title">제목</h5>-->
-<!--                    <div class="d-flex justify-content-between ">-->
-<!--                      <p class="card-text"><small class="text-muted">5분전</small></p>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-                <!-- 카드리스트 종료 -->
+
             </div>
           </div>
         </div>
         <!-- 카드 리스트 -->
 
-        <div class="row d-flex justify-content-center">
-          <button type="button" class="btn btn-link">더보기</button>
-        </div>
-        <!-- add button-->
       </div>
       <!-- 댓글 리스트 d-none를 해지해 볼 수 있다-->
-      <div class="row justify-content-center d-none">
-        <div class="col-md-12">
+      <div class="row justify-content-center" >
+        <div class="col-md-12" id="comment">
           <!-- 댓글 (작성자)-->
           <div class="card">
             <div class="card-body">
-              <div class="row">
+              <div class="row" id="comments">
                 <div class="col-md-2">
                   <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="rounded-circle img-fluid" alt="">
                 </div>
@@ -207,49 +319,6 @@
               </div>
             </div>
           </div>
-          <!-- 댓글 -->
-          <!-- 댓글 (글 작성자)-->
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-2">
-                  <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="rounded-circle img-fluid" alt="">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-10 justify-content-center">
-                      <p>댓글 내용</p>
-                    </div>
-                    <div class="col-md-2 justify-content-center">
-                      <span style="font-size: 12px;">2020-05-05</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 댓글 -->
-          <!-- 댓글 -->
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-2">
-                  <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="rounded-circle img-fluid" alt="">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-10 justify-content-center">
-                      <p>댓글 내용</p>
-                    </div>
-                    <div class="col-md-2 justify-content-center">
-                      <span style="font-size: 12px;">2020-05-05</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 댓글 -->
         </div>
     </div>
     </div>

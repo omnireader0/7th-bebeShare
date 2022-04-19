@@ -3,6 +3,10 @@ package bebeShare.service;
 import bebeShare.domain.user.User;
 import bebeShare.domain.user.UserRepository;
 import bebeShare.web.dto.userDto.*;
+import bebeShare.web.dto.userDto.req.CommentRequest;
+import bebeShare.web.dto.userDto.req.GiveRequest;
+import bebeShare.web.dto.userDto.req.LikeRequest;
+import bebeShare.web.dto.userDto.req.ShareRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +26,19 @@ public class UserService {
         return new UserResponseDto(entity);
     }
 
-    public List<ShareInfoResponseDto> shareInfo(UserRequest userRequest) {
-        return userRepository.shareInfo(userRequest);
+    public List<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest) {
+        return userRepository.shareInfo(shareRequest);
     }
 
-    public List<GiveInfoResponseDto> giveInfo(UserRequest userRequest) {
-        return userRepository.giveInfo(userRequest);
+    public List<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest) {
+        return userRepository.giveInfo(giveRequest);
     }
 
-    public List<LikeInfoResponseDto> likeInfo(UserRequest userRequest) {
-        return userRepository.likeInfo(userRequest);
+    public List<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest) {
+        return userRepository.likeInfo(likeRequest);
     }
 
-    public List<MemberCommentResponseDto> comments(UserRequest userRequest) {
-        return userRepository.comments(userRequest);
+    public List<MemberCommentResponseDto> comments(CommentRequest commentRequest) {
+        return userRepository.comments(commentRequest);
     }
 }

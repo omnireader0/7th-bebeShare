@@ -5,8 +5,6 @@ import bebeShare.domain.product.ProductRepository;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import bebeShare.web.dto.productDto.*;
-import bebeShare.web.dto.userDto.ShareInfoResponseDto;
-import bebeShare.web.dto.userDto.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

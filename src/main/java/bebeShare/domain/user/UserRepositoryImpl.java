@@ -1,6 +1,11 @@
 package bebeShare.domain.user;
 
 import bebeShare.web.dto.userDto.*;
+import bebeShare.web.dto.userDto.req.CommentRequest;
+import bebeShare.web.dto.userDto.req.GiveRequest;
+import bebeShare.web.dto.userDto.req.LikeRequest;
+import bebeShare.web.dto.userDto.req.ShareRequest;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -11,6 +16,7 @@ import static bebeShare.domain.comment.QComment.comment;
 import static bebeShare.domain.like.QDibs.dibs;
 import static bebeShare.domain.product.QProduct.product;
 import static bebeShare.domain.user.QUser.user;
+import static org.springframework.util.StringUtils.hasText;
 
 
 public class UserRepositoryImpl implements UserRepositoryCustom {
@@ -23,7 +29,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 
     @Override
-    public List<ShareInfoResponseDto> shareInfo(UserRequest userRequest) {
+    public List<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest) {
 
 
         return queryFactory                 //join 에서 양쪽 테이블 프로젝션을 가져오기때문에 MemberTeamDto를 따로빼서 원하는 값을 가져오게함, 셀렉트방식은 생성자로
@@ -35,18 +41,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 ))
                 .from(product)
                 .where(
-                        productMemberIdEq(userRequest.getMemberId()),
-                        productStatus(userRequest.getProductStatus())
+                        productMemberIdEq(shareRequest.getMemberId()),
+                        productStatus(shareRequest.getProductStatus())
                 )
-                .offset(userRequest.getPage())
-                .limit(userRequest.getSize())
+//                .offset(shareRequest.getPage())
+//                .limit(shareRequest.getSize())
                 .orderBy(product.createdDate.desc())
                 .fetch();
     }
 
 
     @Override
-    public List<GiveInfoResponseDto> giveInfo(UserRequest userRequest) {
+    public List<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest) {
         return queryFactory
                 .select(new QGiveInfoResponseDto(
                         product.id,
@@ -57,17 +63,17 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 ))
                 .from(product)
                 .where(
-                        productMemberIdEq(userRequest.getMemberId()),
-                        productStatus(userRequest.getProductStatus())
+                        productShareIdEq(giveRequest.getShareId()),
+                        productStatus(giveRequest.getProductStatus())
                 )
-                .offset(userRequest.getPage())
-                .limit(userRequest.getSize())
+//                .offset(giveRequest.getPage())
+//                .limit(giveRequest.getSize())
                 .orderBy(product.createdDate.desc())
                 .fetch();
     }
 
     @Override
-    public List<LikeInfoResponseDto> likeInfo(UserRequest userRequest) {
+    public List<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest) {
 
         return queryFactory
                 .select(new QLikeInfoResponseDto(
@@ -76,18 +82,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         product.productImage1,
                         product.createdDate.as("insertDt")
                 )).from(dibs)
-                .join(dibs.product , product)
-                .join(dibs.user , user)
+                .join(dibs.product, product)
+                .join(dibs.user, user)
                 .where(
-                        memberIdEq(userRequest.getMemberId())
+                        likeIdEq(likeRequest.getMemberId())
                 )
-                .offset(userRequest.getPage())
-                .limit(userRequest.getSize())
+//                .offset(likeRequest.getPage())
+//                .limit(likeRequest.getSize())
                 .fetch();
     }
 
     @Override
-    public List<MemberCommentResponseDto> comments(UserRequest userRequest) {
+    public List<MemberCommentResponseDto> comments(CommentRequest commentRequest) {
         return queryFactory
                 .select(
                         new QMemberCommentResponseDto(
@@ -100,16 +106,27 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .join(comment.product, product)
                 .join(comment.user, user)
                 .where(
-                        memberIdEq(userRequest.getMemberId())
+                        commentMeberIdEq(commentRequest.getMemberId())
                 )
-                .offset(userRequest.getPage())
-                .limit(userRequest.getSize())
+//                .offset(commentRequest.getPage())
+//                .limit(commentRequest.getSize())
                 .fetch();
     }
 
+    private BooleanExpression commentMeberIdEq(Long memberId) {
+        return memberId == 0 ? comment.user.id.isNull() : comment.user.id.eq(memberId);
+    }
 
     private BooleanExpression productMemberIdEq(long memberId) {
-        return product.user.id.eq(memberId);
+        return memberId == 0 ? product.user.id.isNull() : product.user.id.eq(memberId);
+    }
+
+    private BooleanExpression productShareIdEq(long shareId) {
+        return shareId == 0 ? product.shareId.isNull() : product.shareId.eq(shareId);
+    }
+
+    private BooleanExpression likeIdEq(long likeId) {
+        return likeId == 0 ? dibs.user.id.isNull() : dibs.user.id.eq(likeId);
     }
 
     private BooleanExpression memberIdEq(long memberId) {
@@ -117,8 +134,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     private BooleanExpression productStatus(String productStatus) {
-        return productStatus != null ? product.productStatus.eq(productStatus) : null;
+        return hasText(productStatus) ? product.productStatus.eq(productStatus) : null;
     }
-
-
 }

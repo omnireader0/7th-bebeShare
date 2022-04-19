@@ -5,154 +5,211 @@
       layout:decorate="~{layouts/layout}">
 <head>
 
-        <style th:inline="css">
-            .float {
-                position: fixed;
-                width: 60px;
-                height: 60px;
-                bottom: 40px;
-                right: 40px;
-                background-color: orange;
-                color: white;
-                border-radius: 50px;
-                text-align: center;
-                box-shadow: 2px 2px 3px #999;
-            }
+    <style th:inline="css">
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: orange;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+        }
 
-            .my-float {
-                margin-top: 22px;
-            }
+        .my-float {
+            margin-top: 22px;
+        }
 
-            .card-img-top {
-                height: 200px;
-                width: 100%;
-            }
+        .card-img-top {
+            height: 200px;
+            width: 100%;
+        }
 
-            .btn-link{
-                color: #dc3545;
-            }
-            .btn btn-link{
-                color: #e6dbb9;
-            }
-        </style>
+        .btn-link {
+            color: #dc3545;
+        }
+
+        .btn btn-link {
+            color: #e6dbb9;
+        }
+
+
+        .btn-outline-secondary {
+            color: black;
+            border-color: black;
+        }
+    </style>
     <script th:inline="javascript">
 
-        $(function() {
+
+        $(function () {
             selProducts();
             selCodes();
 
 
-            $('#searchBtn').on('click', function(e) {
+            $('#searchBtn').on('click', function (e) {
                 selProducts();
             });
 
             $("#productName").keydown(function (key) {
 
-                if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+                if (key.keyCode == 13) {//키가 13이면 실행 (엔터는 13)
                     selProducts();
                 }
 
             });
 
-            $('button .btn btn-link').on('click', function(e) {
-                console.log(true)
-                console.log($(this).attr("id"));
-                if($(this).hasClass('fill')){
-                    $(this).attr('class', 'bi-heart');
-                    return 0;
-                }
 
-                $(this).attr('class','bi-heart-fill');
-
-            });
         });
 
 
+        function selCodes() {
 
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.code = "100";
 
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/categories',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("카테고리리스트:{}", data);
+                    const categories = data;
 
-            function selCodes() {
+                    for (var i = 0; i < categories.length; i++) {
+                        cHtml += '<div class="col-md-2">';
+                        cHtml += '<button type="button" codeCt="' + categories[i].code + '" class="btn btn-outline-secondary rounded-pill">' + categories[i].codeName + '</button>';
+                        cHtml += '</div>';
 
-                const p_trans = {};
-                let cHtml = '';
-                 p_trans.code = "100";
-
-                $.ajax({
-                    dataType: 'json',
-                    type: "POST",
-                    contentType: "application/json;charset=utf-8",
-                    url: '/api/v1/categories',
-                    data: JSON.stringify(p_trans),
-                    success: function(data) {
-                        console.log("카테고리리스트:{}",data);
-                        const categories = data;
-
-                        for(var i=0; i<categories.length; i++){
-                            cHtml += '<div class="col-md-2">';
-                            cHtml += '<button type="button" class="btn btn-outline-secondary rounded-pill">'+categories[i].codeName+'</button>';
-                            cHtml += '</div>';
-
-                        }
-
-                        $('#categories').html(cHtml);
-
-
-                    },
-                    error: function (e) {
-                        console.log(e.message);
                     }
-                });
-            }
 
-            function selProducts() {
-                $('#proudcts').empty();
-
-                const p_trans = {};
-                let pHtml = '';
-                p_trans.productName = $("#productName").val();
-                p_trans.categoryCode = '100';
-
-                $.ajax({
-                    dataType: 'json',
-                    type: "POST",
-                    contentType: "application/json;charset=utf-8",
-                    url: '/api/v1/products',
-                    data: JSON.stringify(p_trans),
-                    success: function(data) {
-                        console.log("상품리스트:{}",data);
-                        const products = data;
-
-                        for(var i=0; i<products.length; i++){
-                           let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+                    $('#categories').html(cHtml);
 
 
-                            pHtml += '<div class="col-md-4">';
-                            pHtml += '  <div class="card">';
-                            pHtml += '      <img class="card-img-top" src="'+products[i].productImage1+'" alt="Card image cap" >';
-                            pHtml += '          <div class="card-body">';
-                            pHtml += '              <h5 class="card-title">'+products[i].productName+'</h5>';
-                            pHtml += '              <div class="d-flex justify-content-between ">';
-                            pHtml += '                  <p class="card-text"><small class="text-muted">'+products[i].insertDt+'</small>';
-                            pHtml += '                  <button type="button" class="btn btn-link">';
-                            pHtml += '                  <i class="'+likeYn+'" id="'+products[i].productId+'"></i>';
-                            pHtml += '                  </button>';
-                            pHtml += '              </div>';
-                            pHtml += '          </div>';
-                            pHtml += '  </div>';
-                            pHtml += '</div>';
+                    $('.rounded-pill').click(function () {
+                            $('.col-md-2 button').css('color', 'black');
+                            $('.col-md-2 button').css('border-color', 'black');
+                            $('.col-md-2 button').css('background-color', 'white');
+                            $('.col-md-2 button').removeClass("active");
+
+
+                            $(this).css('background-color', '#b6d4fe');
+                            $(this).css('color', 'white');
+                            $(this).addClass('active');
+                            $(this).attr('id', 'activeCode');
+
+                            selProducts();
                         }
+                    );
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
 
 
-                        $('#proudcts').html(pHtml);
+        }
 
-                       },
-                    error: function (e) {
-                        console.log(e.message);
+        function selProducts() {
+            $('#proudcts').empty();
+
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.productName = $("#productName").val();
+            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("상품리스트:{}", data);
+                    const products = data;
+
+                    for (var i = 0; i < products.length; i++) {
+                        let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+
+
+                        pHtml += '<div class="col-md-4">';
+                        pHtml += '  <div class="card">';
+                        pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
+                        pHtml += '          <div class="card-body">';
+                        pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
+                        pHtml += '              <div class="d-flex justify-content-between ">';
+                        pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
+                        pHtml += '                  <button type="button" class="btn btn-link" id="like">';
+                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '" likeId="'+products[i].dibsId+'"></i>';
+                        pHtml += '                  </button>';
+                        pHtml += '              </div>';
+                        pHtml += '          </div>';
+                        pHtml += '  </div>';
+                        pHtml += '</div>';
                     }
-                });
-            }
 
-        </script>
+
+                    $('#proudcts').html(pHtml);
+
+                    $('.card-text button i').click(function () {
+                        console.log($(this).attr('like'))
+                            if ($(this).attr('likeId') != 0) {
+                                $(this).attr('class', 'bi-heart');
+                                deleteLike($(this).attr("likeId"));
+
+                                return 0;
+                            }
+                            $(this).attr('class', 'bi-heart-fill');
+                            console.log("ture:" +$(this).attr("id"))
+                            addLike($(this).attr("id"));
+                        }
+                    );
+
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+
+        function addLike(productId) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/like/' + productId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 등록 되었습니다.');
+                selProducts();
+
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function deleteLike(likeId) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/like/' + likeId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 해제 되었습니다.');
+                selProducts();
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+    </script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -194,30 +251,7 @@
         <div class="row d-flex justify-content-center">
             <!-- 왼쪽 여백 -->
             <div class="row col-md-12 justify-content-start" id="categories">
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill">#남자아이</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#여자아이</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#4세~7세</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#인형</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#2~3세</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#2~3세</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#2~3세</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button " class="btn btn-outline-secondary rounded-pill">#2~3세</button>
-                </div>
+
             </div>
             <!-- 태그 버튼 -->
         </div>

@@ -39,12 +39,17 @@ public class User extends BaseEntity {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Product> products = new ArrayList<>();
 
 
     private Integer shareCnt;
     private Integer giveCnt;
     private Integer shareChanceCnt;
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 
 
     @Builder

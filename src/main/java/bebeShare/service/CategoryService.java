@@ -19,8 +19,8 @@ public class CategoryService {
     }
 
 
-    public List<CodeResponseDto> findByCode(CategoryReqeustDto categoryReqeustDto){
-         return codeRepository.findByCode(categoryReqeustDto.getCode())
+    public List<CodeResponseDto> findAll(){
+         return codeRepository.findAll()
                  .stream()
                  .map(CodeResponseDto::new)
                  .collect(Collectors.toList());

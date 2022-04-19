@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString(of = {"id", "productName", "productContent", "productImage1", "productImage2", "productImage3", "productStatus", "productCategory", "deleteYn"})
+@ToString
 @Getter
 @NoArgsConstructor
 @Table(name = "Product")
@@ -26,9 +26,11 @@ public class Product extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
+    @ToString.Exclude
     private User user;
 
     @OneToMany(mappedBy = "product")
+    @ToString.Exclude
     private List<Dibs> dibs = new ArrayList<>();
 
 
@@ -50,6 +52,14 @@ public class Product extends BaseEntity {
     private String deleteYn;
 
     private Long shareId;
+
+    public void setDibs(List<Dibs> dibs) {
+        this.dibs = dibs;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 
     @Builder

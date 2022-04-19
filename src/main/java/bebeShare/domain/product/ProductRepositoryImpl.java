@@ -12,6 +12,7 @@ import java.util.List;
 
 import static bebeShare.domain.like.QDibs.dibs;
 import static bebeShare.domain.product.QProduct.product;
+import static org.springframework.util.StringUtils.hasText;
 
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
@@ -33,22 +34,37 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         product.createdDate.as("insertDt")
                 ))
                 .from(product)
-                .leftJoin(product.dibs , dibs)
+                .leftJoin(product.dibs, dibs)
                 .where(
+                        productMemberIdEq(productRequest.getMemberId()),
+                        productShareId(productRequest.getShareId()),
                         productNameEq(productRequest.getProductName()),
-                        productCategoryEq(productRequest.getCategoryCode())
+                        productCategoryEq(productRequest.getCategoryCode()),
+                        productStatusEq(productRequest.getProductStatus())
                 )
                 .orderBy(product.createdDate.desc())
                 .from(product)
                 .fetch();
     }
 
-    private Predicate productCategoryEq(String categoryCode) {
-        return !categoryCode.isEmpty() ? product.productCategory.eq(categoryCode) : null;
+
+    private BooleanExpression productCategoryEq(String categoryCode) {
+        return hasText(categoryCode) ? product.productCategory.eq(categoryCode) : null;
     }
 
     private BooleanExpression productNameEq(String productName) {
-        return !productName.isEmpty() ? product.productName.eq(productName) : null;
+        return hasText(productName) ? product.productName.eq(productName) : null;
     }
 
+    private BooleanExpression productStatusEq(String productStatus) {
+        return hasText(productStatus) ? product.productStatus.eq(productStatus) : null;
+    }
+
+    private BooleanExpression productMemberIdEq(Long id) {
+        return id == null ? product.user.id.isNull() : product.user.id.eq(id);
+    }
+
+    private Predicate productShareId(Long shareId) {
+        return shareId == null ? product.shareId.isNull() : product.shareId.eq(shareId);
+    }
 }

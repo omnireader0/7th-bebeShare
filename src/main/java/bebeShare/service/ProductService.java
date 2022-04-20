@@ -6,6 +6,9 @@ import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import bebeShare.web.dto.productDto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +39,9 @@ public class ProductService {
     }
 
     // 상품 게시글 목록 조회
-    public List<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest) {
+    public Page<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest, Pageable pageable) {
         try {
-            List<ProductInfoResponseDto> products = productRepository.findAllProducts(productRequest);
+            Page<ProductInfoResponseDto> products = productRepository.findAllProducts(productRequest,pageable);
             return products;
         }catch (Exception e){
             e.printStackTrace();

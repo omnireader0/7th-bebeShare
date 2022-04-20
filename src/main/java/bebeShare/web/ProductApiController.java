@@ -8,8 +8,11 @@ import bebeShare.service.ProductService;
 import bebeShare.web.dto.productDto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Slf4j
@@ -29,8 +32,12 @@ public class ProductApiController {
 
     // 상품 게시글 목록 조회
     @PostMapping(value = "/products")
-    public List<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest, @LoginUser SessionUser sessionUser) {
-        return productService.findAllProducts(productRequest);
+    public Page<ProductInfoResponseDto> findAllProducts(@RequestBody ProductRequest productRequest, Pageable pageable) {
+
+        System.out.println("size:" + productRequest.getSize());
+        System.out.println("page:" + productRequest.getPage());
+        pageable = PageRequest.of(productRequest.getPage(), productRequest.getSize());
+        return productService.findAllProducts(productRequest , pageable);
     }
 
 

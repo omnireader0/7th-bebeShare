@@ -124,6 +124,7 @@
             p_trans.productName = $("#productName").val();
             p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
 
+
             $.ajax({
                 dataType: 'json',
                 type: "POST",
@@ -132,7 +133,7 @@
                 data: JSON.stringify(p_trans),
                 success: function (data) {
                     console.log("상품리스트:{}", data);
-                    const products = data;
+                    const products = data.content;
 
                     for (var i = 0; i < products.length; i++) {
                         let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
@@ -171,6 +172,63 @@
                         }
                     );
 
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function addProducts() {
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.productName = $("#productName").val();
+            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
+            p_trans.page = $('.col-md-4').length +1;
+            p_trans.size = 9;
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("상품리스트:{}", data);
+                    const products = data.content;
+
+                    for (var i = 0; i < products.length; i++) {
+                        let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+                        pHtml += '<div class="col-md-4">';
+                        pHtml += '  <div class="card">';
+                        pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
+                        pHtml += '          <div class="card-body">';
+                        pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
+                        pHtml += '              <div class="d-flex justify-content-between ">';
+                        pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
+                        pHtml += '                  <button type="button" class="btn btn-link" id="like">';
+                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '" likeId="'+products[i].dibsId+'"></i>';
+                        pHtml += '                  </button>';
+                        pHtml += '              </div>';
+                        pHtml += '          </div>';
+                        pHtml += '  </div>';
+                        pHtml += '</div>';
+                    }
+                    $('#proudcts').append(pHtml);
+
+                    $('.card-text button i').click(function () {
+                            console.log($(this).attr('like'))
+                            if ($(this).attr('likeId') != 0) {
+                                $(this).attr('class', 'bi-heart');
+                                deleteLike($(this).attr("likeId"));
+
+                                return 0;
+                            }
+                            $(this).attr('class', 'bi-heart-fill');
+                            console.log("ture:" +$(this).attr("id"))
+                            addLike($(this).attr("id"));
+                        }
+                    );
                 },
                 error: function (e) {
                     console.log(e.message);
@@ -265,7 +323,7 @@
         </div>
         <!-- 카드 리스트 -->
         <div class="row d-flex justify-content-center">
-            <button type="button" class="btn btn-link">더보기</button>
+            <button type="button" class="btn btn-link" onclick="addProducts()">더보기</button>
         </div>
         <!-- add button-->
     </div>

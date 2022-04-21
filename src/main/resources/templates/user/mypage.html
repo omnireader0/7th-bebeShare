@@ -29,6 +29,10 @@
                   height: 200px;
                   width: 100%;
               }
+              sub{
+                  font-size: 17px;
+                  top: 1px;
+              }
           </style>
       </th:block>
 
@@ -36,8 +40,14 @@
 
           <script>
 
+              alert($('#profilePicture').attr("src"))
 
               $(function () {
+
+                  // var user = [[${user}];
+                  //
+                  // alert(user)
+
                   selShareInfo();
 
                   $('.nav-link').click(function () {
@@ -241,23 +251,21 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2">
-          <img class="rounded-circle w-100 h-100" alt="100x100" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(30).jpg"
-          data-holder-rendered="true">
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-2">
-          <h3>이름</h3>
+<!--          <h3 th:text="${user.name}">>이름</h3>-->
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-3">
           <p class="border border-primary rounded-pill p-2 text-primary w-100">
-            나눔한 횟수: 1회
+            나눔한 횟수: <sub th:text="${user.shareCnt +'회'}"></sub>
           </p>
           <p class="border border-primary rounded-pill p-2 text-primary w-100">
-            나눔받은 횟수: 1회
+            나눔받은 횟수: <sub th:text="${user.giveCnt+'회'}"></sub>
           </p>
           <p class="border border-primary rounded-pill p-2 text-primary w-100">
-            남은나눔 받기 횟수: 1회
+            남은나눔 받기 횟수: <sub th:text="${user.shareChanceCnt+'회'}"></sub>
           </p>
         </div>
         <div class="col-md-2"></div>
@@ -303,19 +311,7 @@
           <div class="card">
             <div class="card-body">
               <div class="row" id="comments">
-                <div class="col-md-2">
-                  <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="rounded-circle img-fluid" alt="">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-10">
-                      <p>댓글 내용</p>
-                    </div>
-                    <div class="col-md-2">
-                      <span style="font-size: 12px;">2020-05-05</span>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>

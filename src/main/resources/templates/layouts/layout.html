@@ -30,23 +30,16 @@
         });
 
 
-
-
-        function renderUserPicutre(picture){
-            let phtml = '<img class="rounded-circle w-50 h-50"';
-            phtml += ' src="' + picture+'"';
-            return phtml;
-        }
-
         function initUser(user){
             if(user){
                 console.log("login")
                 $('#login').addClass("d-none");
                 $('#profile').removeClass("d-none");
 
-                console.log("1:"+$('#uPicture').attr('scr'))
-                $('#uPicture').attr('scr',user.picture);
-                console.log("2:"+$('#uPicture').attr('scr'))
+                console.log("1:"+$('#uPicture').attr('src'))
+                console.log("user.picture:"+user.picture)
+                $('#uPicture').attr('src',user.picture);
+                console.log("2:"+$('#uPicture').attr('src'))
 
 
                 $('#userName').text(user.name+'님 안녕하세요!');

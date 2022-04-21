@@ -8,10 +8,10 @@ import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;
 import bebeShare.web.dto.userDto.req.ShareRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -26,19 +26,43 @@ public class UserService {
         return new UserResponseDto(entity);
     }
 
-    public List<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest) {
-        return userRepository.shareInfo(shareRequest);
+    public Page<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest, Pageable pageable) {
+        try {
+            return userRepository.shareInfo(shareRequest, pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public List<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest) {
-        return userRepository.giveInfo(giveRequest);
+    public Page<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest, Pageable pageable) {
+        try {
+            return userRepository.giveInfo(giveRequest, pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public List<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest) {
-        return userRepository.likeInfo(likeRequest);
+    public Page<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest, Pageable pageable) {
+        try {
+            return userRepository.likeInfo(likeRequest, pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public List<MemberCommentResponseDto> comments(CommentRequest commentRequest) {
-        return userRepository.comments(commentRequest);
+    public Page<MemberCommentResponseDto> comments(CommentRequest commentRequest, Pageable pageable) {
+        try {
+            return userRepository.comments(commentRequest, pageable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

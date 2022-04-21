@@ -1,13 +1,17 @@
 package bebeShare.domain.user;
 
+import bebeShare.domain.product.Product;
 import bebeShare.web.dto.userDto.*;
 import bebeShare.web.dto.userDto.req.CommentRequest;
 import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;
 import bebeShare.web.dto.userDto.req.ShareRequest;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -29,10 +33,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 
     @Override
-    public List<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest) {
+    public Page<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest, Pageable pageable) {
 
 
-        return queryFactory                 //join 에서 양쪽 테이블 프로젝션을 가져오기때문에 MemberTeamDto를 따로빼서 원하는 값을 가져오게함, 셀렉트방식은 생성자로
+        List<ShareInfoResponseDto> result = queryFactory
                 .select(new QShareInfoResponseDto(
                         product.id,
                         product.productName,
@@ -44,16 +48,27 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         productMemberIdEq(shareRequest.getMemberId()),
                         productStatus(shareRequest.getProductStatus())
                 )
-//                .offset(shareRequest.getPage())
-//                .limit(shareRequest.getSize())
+                .offset(pageable.getPageNumber())
+                .limit(pageable.getPageSize())
                 .orderBy(product.createdDate.desc())
                 .fetch();
+
+
+        JPAQuery<Product> countQuery = queryFactory.select(product)
+                .from(product)
+                .where(
+                        productMemberIdEq(shareRequest.getMemberId()),
+                        productStatus(shareRequest.getProductStatus())
+                );
+
+        return PageableExecutionUtils.getPage(result, pageable, () -> countQuery.fetchCount());
+
     }
 
 
     @Override
-    public List<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest) {
-        return queryFactory
+    public Page<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest, Pageable pageable) {
+        List<GiveInfoResponseDto> result = queryFactory
                 .select(new QGiveInfoResponseDto(
                         product.id,
                         product.productName,
@@ -66,16 +81,25 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         productShareIdEq(giveRequest.getShareId()),
                         productStatus(giveRequest.getProductStatus())
                 )
-//                .offset(giveRequest.getPage())
-//                .limit(giveRequest.getSize())
+                .offset(pageable.getPageNumber())
+                .limit(pageable.getPageSize())
                 .orderBy(product.createdDate.desc())
                 .fetch();
+
+        JPAQuery<Product> countQuery = queryFactory.select(product)
+                .from(product)
+                .where(
+                        productShareIdEq(giveRequest.getShareId()),
+                        productStatus(giveRequest.getProductStatus())
+                );
+        return PageableExecutionUtils.getPage(result, pageable, () -> countQuery.fetchCount());
+
     }
 
     @Override
-    public List<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest) {
+    public Page<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest, Pageable pageable) {
 
-        return queryFactory
+        List<LikeInfoResponseDto> result = queryFactory
                 .select(new QLikeInfoResponseDto(
                         product.id,
                         product.productName,
@@ -87,19 +111,30 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .where(
                         likeIdEq(likeRequest.getMemberId())
                 )
-//                .offset(likeRequest.getPage())
-//                .limit(likeRequest.getSize())
+                .offset(pageable.getPageNumber())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Product> countQuery = queryFactory.select(product)
+                .from(dibs)
+                .join(dibs.product, product)
+                .join(dibs.user, user)
+                .where(
+                        likeIdEq(likeRequest.getMemberId())
+                );
+        return PageableExecutionUtils.getPage(result, pageable, () -> countQuery.fetchCount());
+
     }
 
     @Override
-    public List<MemberCommentResponseDto> comments(CommentRequest commentRequest) {
-        return queryFactory
+    public Page<MemberCommentResponseDto> comments(CommentRequest commentRequest, Pageable pageable) {
+        List<MemberCommentResponseDto> result = queryFactory
                 .select(
                         new QMemberCommentResponseDto(
                                 comment.id.as("commentId"),
                                 product.productName,
                                 comment.commentContent,
+                                product.productImage1,
                                 comment.createdDate.as("insertDt")
                         )
                 ).from(comment)
@@ -108,9 +143,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .where(
                         commentMeberIdEq(commentRequest.getMemberId())
                 )
-//                .offset(commentRequest.getPage())
-//                .limit(commentRequest.getSize())
+                .offset(pageable.getPageNumber())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Product> countQuery = queryFactory.select(product)
+                .from(comment)
+                .join(comment.product, product)
+                .join(comment.user, user)
+                .where(
+                        commentMeberIdEq(commentRequest.getMemberId())
+                );
+        return PageableExecutionUtils.getPage(result, pageable, () -> countQuery.fetchCount());
     }
 
     private BooleanExpression commentMeberIdEq(Long memberId) {

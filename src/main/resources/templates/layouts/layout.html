@@ -31,6 +31,9 @@
     $(function () {
         var user = [[ ${session.user}]]; // 세션에 저장되 있는 값을 가져온다
         initUser(user);
+        $('#logout').on('click', function (e) {
+            localStorage.clear();
+        });
     });
 
 
@@ -41,7 +44,8 @@
             $('#profile').removeClass("d-none");
             $('#uPicture').attr('src', user.picture);
             $('#userName').text(user.name + '님 안녕하세요!');
-            return
+            localStorage.setItem("username",user.name)
+            return;
         }
 
         $('#profile').addClass("d-none");

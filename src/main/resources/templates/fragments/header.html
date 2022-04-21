@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     </head>
 
+<script th:inline="javascript">
+
+</script>
 <footer th:fragment="headerFragment">
 
     <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
@@ -26,11 +29,10 @@
         <div class="col-md-3" id="profile">
             <span id="userName"></span>
             <a class="btn btn-link" href="/user/mypage">
-<!--                <img id="uPicture" class="rounded-circle w-50 h-50" alt="100x100"  data-holder-rendered="true">-->
                 <img id="uPicture" class="rounded-circle w-50 h-50" alt="100x100"
                      data-holder-rendered="true">
             </a>
-            <a href="/logout" class="btn btn-danger" role="button">Logout</a>
+            <a id="logout" href="/logout" class="btn btn-danger" role="button">Logout</a>
         </div>
     </div>
 </footer>

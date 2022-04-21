@@ -7,6 +7,7 @@ import lombok.Getter;
 public class UserResponseDto {
 
     private Long memberId;
+    private String name;
     private Integer shareCnt;
     private Integer giveCnt;
     private Integer shareChanceCnt;
@@ -14,6 +15,7 @@ public class UserResponseDto {
 
     public UserResponseDto(User user) {
         this.memberId = user.getId();
+        this.name = user.getName();
         this.shareCnt = user.getShareCnt();
         this.giveCnt = user.getGiveCnt();
         this.shareChanceCnt = user.getShareChanceCnt();

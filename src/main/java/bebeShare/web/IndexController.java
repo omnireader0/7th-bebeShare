@@ -4,6 +4,7 @@ import bebeShare.config.auth.LoginUser;
 import bebeShare.config.auth.dto.SessionUser;
 import bebeShare.service.PostsService;
 import bebeShare.service.ProductService;
+import bebeShare.service.UserService;
 import bebeShare.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,18 +19,10 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
-    private final ProductService productService;
+    private final UserService userService;
 
     @GetMapping("/")
-    public String index(Model model ,  @LoginUser SessionUser user) {
-
-//        model.addAttribute("posts", postsService.findAllDesc());
-
-        if (user != null) {
-            model.addAttribute("user", user);
-        }
-
+    public String index(Model model) {
         return "views/main";
     }
 
@@ -54,37 +47,19 @@ public class IndexController {
         return id;
     }
 
-
     @GetMapping("/product/detail")
-    public String detailProduct(Model model ,  @LoginUser SessionUser user) {
-
-
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-
+    public String detailProduct(Model model) {
         return "product/detail";
     }
 
     @GetMapping("/product/register")
-    public String registerProduct(Model model ,  @LoginUser SessionUser user) {
-
-
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-
+    public String registerProduct(Model model) {
         return "product/register";
     }
 
     @GetMapping("/user/mypage")
     public String mypage(Model model ,  @LoginUser SessionUser user) {
-
-
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-
+        model.addAttribute("user", userService.findById(user.getId()));
         return "user/mypage";
     }
 }

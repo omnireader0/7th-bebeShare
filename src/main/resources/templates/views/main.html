@@ -93,13 +93,19 @@
 
 
                     $('.rounded-pill').click(function () {
+                            if($(this).hasClass('active')){ // 엑티브된 카테고리 다시눌럿을때 해제
+                                $(this).css('color', 'black');
+                                $(this).css('border-color', 'black');
+                                $(this).css('background-color', 'white');
+                                $(this).removeClass("active");
+                                return;
+                            }
+
                             $('.col-md-2 button').css('color', 'black');
                             $('.col-md-2 button').css('border-color', 'black');
                             $('.col-md-2 button').css('background-color', 'white');
                             $('.col-md-2 button').removeClass("active");
 
-
-                            $(this).css('background-color', '#b6d4fe');
                             $(this).css('color', 'white');
                             $(this).addClass('active');
                             $(this).attr('id', 'activeCode');
@@ -246,7 +252,6 @@
                 contentType: 'application/json; charset=utf-8'
             }).done(function () {
                 alert('좋아요가 등록 되었습니다.');
-                selProducts();
 
             }).fail(function (error) {
                 alert(JSON.stringify(error));
@@ -261,7 +266,6 @@
                 contentType: 'application/json; charset=utf-8'
             }).done(function () {
                 alert('좋아요가 해제 되었습니다.');
-                selProducts();
             }).fail(function (error) {
                 alert(JSON.stringify(error));
             });

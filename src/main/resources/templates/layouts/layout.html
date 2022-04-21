@@ -18,18 +18,45 @@
 
 
     </head>
+
+    <header th:replace="fragments/header :: headerFragment"></header>
+
     <script th:inline="javascript">
 
-        var user = [[${user}]];
-        if(user){
-            console.log("login")
-            $('#login').addClass("d-none");
-            $('#profile').removeClass("d-none");
-            console.log("ee")
-            $('#profile').attr('scr',user.picture);
+
+        $(function () {
+            var user = [[ ${session.user} ]]; // 세션에 저장되 있는 값을 가져온다
+            initUser(user);
+        });
+
+
+
+
+        function renderUserPicutre(picture){
+            let phtml = '<img class="rounded-circle w-50 h-50"';
+            phtml += ' src="' + picture+'"';
+            return phtml;
+        }
+
+        function initUser(user){
+            if(user){
+                console.log("login")
+                $('#login').addClass("d-none");
+                $('#profile').removeClass("d-none");
+
+                console.log("1:"+$('#uPicture').attr('scr'))
+                $('#uPicture').attr('scr',user.picture);
+                console.log("2:"+$('#uPicture').attr('scr'))
+
+
+                $('#userName').text(user.name+'님 안녕하세요!');
+                return
+            }
+
+            $('#profile').addClass("d-none");
+            $('#login').removeClass("d-none");
         }
     </script>
-    <header th:replace="fragments/header :: headerFragment"></header>
 
     <th:block layout:fragment="content">
         <body>

@@ -26,16 +26,6 @@ public class ProductApiController {
     // 상품 게시글 등록
     @PostMapping("/product")
     public Long save(@RequestBody final ProductCreateRequestDto params) {
-        System.out.println("params.getProductId() = " + params.getProductId());
-        System.out.println("params.getUser = " + params.getUser());
-        System.out.println("params.getProductName = " + params.getProductName());
-        System.out.println("params.getProductContent = " + params.getProductContent());
-        System.out.println("params.getProductImage1 = " + params.getProductImage1());
-        System.out.println("params.getProductImage2 = " + params.getProductImage2());
-        System.out.println("params.getProductImage3 = " + params.getProductImage3());
-        System.out.println("params.getProductCategory = " + params.getProductCategory());
-        System.out.println("params.getProductStatus = " + params.getProductStatus());
-        System.out.println("params.getDeleteYn = " + params.getDeleteYn());
         return productService.save(params);
     }
 

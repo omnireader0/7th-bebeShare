@@ -1,9 +1,10 @@
 package bebeShare.domain.user;
 
-import bebeShare.web.dto.userDto.GiveInfoResponseDto;
-import bebeShare.web.dto.userDto.LikeInfoResponseDto;
-import bebeShare.web.dto.userDto.MemberCommentResponseDto;
-import bebeShare.web.dto.userDto.ShareInfoResponseDto;
+
+import bebeShare.web.dto.userDto.dto.GiveInfoResponseDto;
+import bebeShare.web.dto.userDto.dto.LikeInfoResponseDto;
+import bebeShare.web.dto.userDto.dto.MemberCommentResponseDto;
+import bebeShare.web.dto.userDto.dto.ShareInfoResponseDto;
 import bebeShare.web.dto.userDto.req.CommentRequest;
 import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;

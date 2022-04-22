@@ -5,6 +5,7 @@ import bebeShare.config.auth.dto.SessionUser;
 import bebeShare.service.ProductService;
 import bebeShare.service.UserService;
 import bebeShare.web.dto.userDto.*;
+import bebeShare.web.dto.userDto.dto.*;
 import bebeShare.web.dto.userDto.req.CommentRequest;
 import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;

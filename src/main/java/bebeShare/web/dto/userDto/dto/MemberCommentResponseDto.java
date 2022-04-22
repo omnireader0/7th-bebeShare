@@ -1,6 +1,7 @@
 package bebeShare.web.dto.userDto.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.StringPath;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ public class MemberCommentResponseDto {
     private Long commentId;
     private String productName;
     private String commentContent;
+    //private StringPath productImage1;
     private LocalDateTime insertDt;
 
 
@@ -22,6 +24,7 @@ public class MemberCommentResponseDto {
         this.commentId = commentId;
         this.productName   = productName;
         this.commentContent = commentContent;
+        //this.productImage1 = productImage1;
         this.insertDt = insertDt;
 
     }

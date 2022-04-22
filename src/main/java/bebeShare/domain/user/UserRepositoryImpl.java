@@ -1,7 +1,7 @@
 package bebeShare.domain.user;
 
 import bebeShare.domain.product.Product;
-import bebeShare.web.dto.userDto.*;
+import bebeShare.web.dto.userDto.dto.*;
 import bebeShare.web.dto.userDto.req.CommentRequest;
 import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;
@@ -134,7 +134,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                                 comment.id.as("commentId"),
                                 product.productName,
                                 comment.commentContent,
-                                product.productImage1,
+                                //product.productImage1,
                                 comment.createdDate.as("insertDt")
                         )
                 ).from(comment)

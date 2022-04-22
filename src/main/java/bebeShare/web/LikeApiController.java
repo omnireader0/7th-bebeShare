@@ -7,7 +7,6 @@ import bebeShare.domain.user.User;
 import bebeShare.service.LikeService;
 import bebeShare.web.dto.likeDto.SaveLikeDto;
 import bebeShare.web.dto.productDto.ProductCreateRequestDto;
-import bebeShare.web.dto.likeDto.ProductLikeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

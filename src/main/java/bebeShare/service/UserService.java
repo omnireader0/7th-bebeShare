@@ -3,6 +3,7 @@ package bebeShare.service;
 import bebeShare.domain.user.User;
 import bebeShare.domain.user.UserRepository;
 import bebeShare.web.dto.userDto.*;
+import bebeShare.web.dto.userDto.dto.*;
 import bebeShare.web.dto.userDto.req.CommentRequest;
 import bebeShare.web.dto.userDto.req.GiveRequest;
 import bebeShare.web.dto.userDto.req.LikeRequest;

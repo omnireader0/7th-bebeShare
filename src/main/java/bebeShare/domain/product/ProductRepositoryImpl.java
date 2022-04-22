@@ -3,9 +3,15 @@ package bebeShare.domain.product;
 import bebeShare.web.dto.productDto.ProductInfoResponseDto;
 import bebeShare.web.dto.productDto.ProductRequest;
 import bebeShare.web.dto.productDto.QProductInfoResponseDto;
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,9 +29,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public List<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest) {
+    public Page<ProductInfoResponseDto> findAllProducts(ProductRequest productRequest, Pageable pageable) {
 
-        return queryFactory
+        List<ProductInfoResponseDto> result = queryFactory
                 .select(new QProductInfoResponseDto(
                         product.id,
                         product.productName,
@@ -36,15 +42,26 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .from(product)
                 .leftJoin(product.dibs, dibs)
                 .where(
-                        productMemberIdEq(productRequest.getMemberId()),
-                        productShareId(productRequest.getShareId()),
                         productNameEq(productRequest.getProductName()),
                         productCategoryEq(productRequest.getCategoryCode()),
                         productStatusEq(productRequest.getProductStatus())
                 )
                 .orderBy(product.createdDate.desc())
                 .from(product)
+                .offset(pageable.getPageNumber())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Product> countQuery = queryFactory.select(product)
+                .from(product)
+                .leftJoin(product.dibs, dibs)
+                .where(
+                        productNameEq(productRequest.getProductName()),
+                        productCategoryEq(productRequest.getCategoryCode()),
+                        productStatusEq(productRequest.getProductStatus())
+                );
+
+        return PageableExecutionUtils.getPage(result,pageable, () ->countQuery.fetchCount());
     }
 
 
@@ -64,7 +81,5 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return id == null ? product.user.id.isNull() : product.user.id.eq(id);
     }
 
-    private Predicate productShareId(Long shareId) {
-        return shareId == null ? product.shareId.isNull() : product.shareId.eq(shareId);
-    }
+
 }

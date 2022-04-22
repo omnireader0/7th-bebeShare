@@ -20,6 +20,7 @@ public class IndexController {
 
     private final PostsService postsService;
     private final UserService userService;
+    private final ProductService productService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -47,8 +48,9 @@ public class IndexController {
         return id;
     }
 
-    @GetMapping("/product/detail")
-    public String detailProduct(Model model) {
+    @GetMapping("/product/detail/{id}")
+    public String detailProduct(Model model ,@PathVariable Long id) {
+        model.addAttribute("product", productService.findById(id));
         return "product/detail";
     }
 

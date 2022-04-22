@@ -34,7 +34,6 @@ public class ProductApiController {
 
 
     // 상품 게시글 상세 조회
-    @ResponseBody
     @GetMapping("/products/{productId}")
     public ProductResponseDto findById(@PathVariable Long productId) {
         return productService.findById(productId);
@@ -48,8 +47,10 @@ public class ProductApiController {
 
     // 상품 게시글 삭제
     @DeleteMapping("/products")
-    public void delete(@RequestBody ProductDeleteDto params) {
+    public Long delete(@RequestBody ProductDeleteDto params) {
         productService.delete(params);
+
+        return params.getProductId();
     }
 
 }

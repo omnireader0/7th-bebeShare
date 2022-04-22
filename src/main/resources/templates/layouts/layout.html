@@ -45,6 +45,7 @@
             $('#uPicture').attr('src', user.picture);
             $('#userName').text(user.name + '님 안녕하세요!');
             localStorage.setItem("username",user.name)
+            localStorage.setItem("userId",user.id)
             return;
         }
 

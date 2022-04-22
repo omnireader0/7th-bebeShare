@@ -10,6 +10,7 @@ import lombok.ToString;
 public class ProductRequest extends PageEntity {
     private String productName;
     private String categoryCode;
+    private String orderBy;
 
 //  마이페이지 내역 파라미터값 .
     private Long memberId;

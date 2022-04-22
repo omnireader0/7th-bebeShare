@@ -131,6 +131,7 @@
             const p_trans = {};
             let pHtml = '';
             p_trans.productName = $("#productName").val();
+            p_trans.ordeyBy = $('#ordeyBy').val();
             p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
 
 
@@ -148,7 +149,7 @@
                         let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
 
 
-                        pHtml += '<div class="col-md-4"  onclick="sayHello()">';
+                        pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
                         pHtml += '  <div class="card">';
                         pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
                         pHtml += '          <div class="card-body">';
@@ -167,7 +168,7 @@
 
                     $('#proudcts').html(pHtml);
 
-                    $('.card-text button i').click(function () {
+                    $('.card-text button i').click(function () { //좋아요 버튼 누를 시 이벤트 동작
                         console.log($(this).attr('like'))
                             if ($(this).attr('likeId') != 0) {
                                 $(this).attr('class', 'bi-heart');
@@ -176,12 +177,11 @@
                                 return 0;
                             }
                             $(this).attr('class', 'bi-heart-fill');
-                            console.log("ture:" +$(this).attr("id"))
                             addLike($(this).attr("id"));
                         }
                     );
 
-                    if(!localStorage.getItem("username")){
+                    if(!localStorage.getItem("username")){ // 비로그인시 좋아요와 등록버튼은 숨긴다 .
                         $('.float').hide();
                         $("i").hide();
                     }
@@ -197,6 +197,7 @@
             const p_trans = {};
             let pHtml = '';
             p_trans.productName = $("#productName").val();
+            p_trans.ordeyBy = $('#ordeyBy').val();
             p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
             p_trans.page = $('.col-md-4').length +1;
             p_trans.size = 9;
@@ -213,7 +214,7 @@
 
                     for (var i = 0; i < products.length; i++) {
                         let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
-                        pHtml += '<div class="col-md-4">';
+                        pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
                         pHtml += '  <div class="card">';
                         pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
                         pHtml += '          <div class="card-body">';
@@ -239,7 +240,6 @@
                                 return 0;
                             }
                             $(this).attr('class', 'bi-heart-fill');
-                            console.log("ture:" +$(this).attr("id"))
                             addLike($(this).attr("id"));
                         }
                     );
@@ -279,8 +279,8 @@
             });
         }
 
-        function sayHello() {
-            location.href = '/product/detail'
+        function productDetail(id) {
+            location.href = '/product/detail/'+id
         }
     </script>
     <!-- Required meta tags -->
@@ -311,11 +311,11 @@
             <div class="col-md-12">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">정렬</label>
+                        <label class="input-group-text" for="ordeyBy">정렬</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected>최신순</option>
-                        <option value="1">오래된 순</option>
+                    <select class="custom-select" id="ordeyBy">
+                        <option selected value="desc">최신순</option>
+                        <option value="asc">오래된 순</option>
                     </select>
                 </div>
             </div>

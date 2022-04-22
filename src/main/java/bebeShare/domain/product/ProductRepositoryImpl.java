@@ -44,9 +44,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .where(
                         productNameEq(productRequest.getProductName()),
                         productCategoryEq(productRequest.getCategoryCode()),
-                        productStatusEq(productRequest.getProductStatus())
+                        productStatusEq(productRequest.getProductStatus()),
+                        product.deleteYn.eq("N")
                 )
                 .orderBy(product.createdDate.desc())
+                .orderBy(product.createdDate.asc())
                 .from(product)
                 .offset(pageable.getPageNumber())
                 .limit(pageable.getPageSize())

@@ -11,11 +11,11 @@ public class CommentUpdateResponseDto extends ResEntity {
 
     private String resultCode;
     private String resultMsg;
-    private Long productId;
+    private Long commentId;
 
-    public CommentUpdateResponseDto(Long productId) {
+    public CommentUpdateResponseDto(Long commentId) {
         this.setResultCode(RESPONES_SUCCESS.getValue());
         this.setResultMsg(COMMENT_UPDATE_OK);
-        this.productId = productId;
+        this.commentId = commentId;
     }
 }

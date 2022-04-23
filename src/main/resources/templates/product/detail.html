@@ -27,6 +27,7 @@
         $(function () {
 
             selCodes();
+            selComments();
 
             $("input:checkbox[name=category]").click(function () { //체크박스 동작 이벤트
                     $("input:checkbox[name=category]").prop('checked',false)
@@ -136,43 +137,127 @@
         }
 
 
+
+
+
         function selComments() {
 
+            $('#comments').empty();
+
+
             const p_trans = {};
+            p_trans.productId = $('#productId').val()
             let cHtml = '';
-            p_trans.code = "100";
+            // p_trans.code = "100";
 
             $.ajax({
                 dataType: 'json',
                 type: "POST",
                 contentType: "application/json;charset=utf-8",
-                url: '/api/v1/categories',
-                async: false,
+                url: '/api/v1/comments',
                 data: JSON.stringify(p_trans),
                 success: function (data) {
-                    console.log("카테고리리스트:{}", data);
-                    const categories = data;
+                    console.log("댓글리스트:{}", data);
+                    const comments = data.content;
 
-                    for (var i = 0; i < categories.length; i++) {
-                        cHtml += '<div class="form-check form-check-inline">';
-                        cHtml += '<input class="form-check-input" type="checkbox" id="' + categories[i].code + '" name="category">';
-                        cHtml += '<label class="form-check-label" htmlFor="form-tags">' + categories[i].codeName + '</label>';
-                        cHtml += '</div>';
+                    for (var i = 0; i < comments.length; i++) {
+                        cHtml += '<div class="card">';
+                        cHtml += '<div class="card-body">';
+                        cHtml += '  <div class="row">';
+                        cHtml += '      <div class="col-md-2">';
+                        cHtml += '          <img src="'+comments[i].picture+'" class="rounded-circle img-fluid" alt="" style="width: 118.66px;height: 118.66px;">';
+                        cHtml += '      </div>';
+
+
+                                  if(comments[i].userId == $('#authorId').val()){
+                                      cHtml += '              <div class="col-md-10">';
+                                      cHtml += '                <div class="row">';
+                                      cHtml += '                    <div class="col-md-10">';
+                                      cHtml += '                        <textarea class="form-control" rows="3">'+comments[i].commentContent+'</textarea>';
+                                      cHtml += '                    </div>';
+                                      cHtml += '                    <div class="col-md-2">';
+                                      cHtml += '                        <button type="button" class="btn btn-outline-secondary" onclick="javascript:updateComment('+comments[i].commentId+')">수정</button>';
+                                      cHtml += '                        <button type="button" class="btn btn-danger" onclick="javascript:deleteComment('+comments[i].commentId+')">삭제</button>';
+                                      cHtml += '                        <span style="font-size: 12px;">'+comments[i].insertDt+'</span>';
+                                      cHtml += '                    </div>';
+                                  }else{
+                                      cHtml += '              <div class="col-md-10">';
+                                      cHtml += '              <div class="row">';
+                                      cHtml += '              <div class="col-md-10 justify-content-center">';
+                                      cHtml += '                  <p>'+comments[i].commentContent+'</p>';
+                                      cHtml += '              </div>';
+                                      cHtml += '              <div class="col-md-2">';
+                                      cHtml += '                    <button type="button" class="btn btn-outline-secondary" style="display: none" id="'+comments[i].userId+'">수정</button>';
+                                      cHtml += '                    <button type="button" class="btn btn-danger" style="display: none" id="'+comments[i].userId+'">삭제</button>';
+                                      cHtml += '                    <button type="button" class="btn btn-primary p-2" id="shareBtn">나눔하기</button>';
+                                      cHtml += '                    <span style="font-size: 12px;">'+comments[i].insertDt+'</span>';
+                                      cHtml += '              </div>';
+                                  }
+                        cHtml += '              </div>';
+                        cHtml += '              </div>';
+                        cHtml += '              </div>';
+                        cHtml += '              </div>';
+                        cHtml += '              </div>';
 
                     }
 
-                    $('#codes').html(cHtml);
+                    $('#comments').html(cHtml);
+
                 },
                 error: function (e) {
                     console.log(e.message);
                 }
             });
-            //현재 상품 카테고리 체크해주기
-            $('#' + $('#codes').attr('value')).prop('checked', true);
-            $('#' + $('#codes').attr('value')).addClass('checked');
+
         }
 
 
+        function updateComment(commentId,content) {
+
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.commentId = commentId;
+            p_trans.commentContent = content;
+
+            $.ajax({
+                dataType: 'json',
+                type: "PATCH",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/comments',
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("댓글이 수정되었습니다.");
+                    selComments();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function deleteComment(commentId) {
+
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.commentId = commentId;
+
+            $.ajax({
+                dataType: 'json',
+                type: "DELETE",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/comments',
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("댓글이 수정되었습니다.");
+                    selComments();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
     </script>
 </head>
 
@@ -306,7 +391,7 @@
         <!-- 댓글 입력 창 -->
         <!-- 댓글 리스트 -->
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-10" id="comments">
                 <!-- 댓글 (작성자)-->
                 <div class="card">
                     <div class="card-body">
@@ -318,7 +403,7 @@
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <p>댓글 내용</p>
+                                        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요."></textarea>
                                     </div>
                                     <div class="col-md-2">
                                         <button type="button" class="btn btn-outline-secondary">수정</button>
@@ -332,49 +417,49 @@
                 </div>
                 <!-- 댓글 -->
                 <!-- 댓글 (글 작성자)-->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"
-                                     class="rounded-circle img-fluid" alt="">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-10 justify-content-center">
-                                        <p>댓글 내용</p>
-                                    </div>
-                                    <div class="col-md-2 justify-content-center">
-                                        <button type="button" class="btn btn-primary p-2">나눔하기</button>
-                                        <span style="font-size: 12px;">2020-05-05</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 댓글 -->
-                <!-- 댓글 -->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"
-                                     class="rounded-circle img-fluid" alt="">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-10 justify-content-center">
-                                        <p>댓글 내용</p>
-                                    </div>
-                                    <div class="col-md-2 justify-content-center">
-                                        <span style="font-size: 12px;">2020-05-05</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-2">-->
+<!--                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"-->
+<!--                                     class="rounded-circle img-fluid" alt="">-->
+<!--                            </div>-->
+<!--                            <div class="col-md-10">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-md-10 justify-content-center">-->
+<!--                                        <p>댓글 내용</p>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-2 justify-content-center">-->
+<!--                                        <button type="button" class="btn btn-primary p-2">나눔하기</button>-->
+<!--                                        <span style="font-size: 12px;">2020-05-05</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 댓글 &ndash;&gt;-->
+<!--                &lt;!&ndash; 댓글 &ndash;&gt;-->
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-2">-->
+<!--                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"-->
+<!--                                     class="rounded-circle img-fluid" alt="">-->
+<!--                            </div>-->
+<!--                            <div class="col-md-10">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-md-10 justify-content-center">-->
+<!--                                        <p>댓글 내용</p>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-2 justify-content-center">-->
+<!--                                        <span style="font-size: 12px;">2020-05-05</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <!-- 댓글 -->
             </div>
         </div>

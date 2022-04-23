@@ -106,7 +106,8 @@ public class ProductRepositoryTest {
 
         // 2. 게시글 저장
         productRepository.save(product);
-        
+
+
         // 1. 게시글 조회
         Product entity = productRepository.findById((long) 1).get();
 

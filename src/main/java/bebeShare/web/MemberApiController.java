@@ -46,7 +46,6 @@ public class MemberApiController {
         return userService.giveInfo(giveRequest, pageable);
     }
 
-
     @PostMapping("/likeInfo")
     public Page<LikeInfoResponseDto> likeInfo(@RequestBody LikeRequest likeRequest, @LoginUser SessionUser user) {
         Pageable pageable = PageRequest.of(likeRequest.getPage(), likeRequest.getSize());
@@ -60,6 +59,7 @@ public class MemberApiController {
         Pageable pageable = PageRequest.of(commentRequest.getPage(), commentRequest.getSize());
         commentRequest.setMemberId(user.getId());
         return userService.comments(commentRequest, pageable);
-    }
 
+
+    }
 }

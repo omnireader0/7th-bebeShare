@@ -1,15 +1,10 @@
 package bebeShare.domain.product;
 
-import bebeShare.web.dto.productDto.ProductInfoResponseDto;
-import bebeShare.web.dto.productDto.ProductRequest;
-import bebeShare.web.dto.productDto.QProductInfoResponseDto;
-import com.querydsl.core.QueryResults;
+import bebeShare.web.dto.productDto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
@@ -63,7 +58,36 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                         productStatusEq(productRequest.getProductStatus())
                 );
 
-        return PageableExecutionUtils.getPage(result,pageable, () ->countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(result, pageable, () -> countQuery.fetchCount());
+    }
+
+    @Override
+    public Long approveShare(ApproveShareProductRequest approveShareProductRequest) {
+        return queryFactory
+                .update(product)
+                .set(product.shareId,approveShareProductRequest.getShareId())
+                .set(product.productStatus,"I")
+                .where(product.id.eq(approveShareProductRequest.getProductId()))
+                .execute();
+    }
+
+    @Override
+    public Long completeShare(CompleteShareRequest completeShareRequest) {
+        return queryFactory
+                .update(product)
+                .set(product.productStatus,"C")
+                .where(product.id.eq(completeShareRequest.getProductId()))
+                .execute();
+    }
+
+    @Override
+    public Long rejectShare(RejectShareRequest rejectShareRequest) {
+       return queryFactory
+                .update(product)
+                .set(product.productStatus,"N")
+                .set(product.shareId, 0L)
+                .where(product.id.eq(rejectShareRequest.getProductId()))
+                .execute();
     }
 
 
@@ -82,6 +106,4 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private BooleanExpression productMemberIdEq(Long id) {
         return id == null ? product.user.id.isNull() : product.user.id.eq(id);
     }
-
-
 }

@@ -4,10 +4,10 @@ import bebeShare.domain.product.Product;
 import bebeShare.domain.product.ProductRepository;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
+import bebeShare.web.dto.productDto.ApproveShareProductRequest;
 import bebeShare.web.dto.productDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -75,5 +75,40 @@ public class ProductService {
         Product entity = productRepository.findById(params.getProductId()).orElseThrow(()
                 -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         entity.delete(params);
+    }
+
+    // 상품 게시글 목록 조회
+    @Transactional
+    public Long approveShare(ApproveShareProductRequest approveShareProductRequest) {
+        try {
+            return productRepository.approveShare(approveShareProductRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return 0L;
+        }
+    }
+
+    // 상품 게시글 목록 조회
+    @Transactional
+    public Long completeShare(CompleteShareRequest completeShareRequest) {
+        try {
+            return productRepository.completeShare(completeShareRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return 0L;
+        }
+    }
+
+    @Transactional
+    public Long rejectShare(RejectShareRequest rejectShareRequest) {
+        try {
+            return productRepository.rejectShare(rejectShareRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return 0L;
+        }
     }
 }

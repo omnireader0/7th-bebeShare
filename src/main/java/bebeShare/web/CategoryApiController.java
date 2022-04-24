@@ -2,6 +2,7 @@ package bebeShare.web;
 
 
 import bebeShare.service.CategoryService;
+import lombok.AllArgsConstructor;
 import bebeShare.web.dto.category.CategoryReqeustDto;
 import bebeShare.web.dto.codeDto.CodeResponseDto;
 import lombok.RequiredArgsConstructor;

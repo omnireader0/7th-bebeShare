@@ -5,6 +5,8 @@ import bebeShare.service.ProductService;
 import bebeShare.web.dto.productDto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ public class ProductApiController {
 
     private final ProductService productService;
     private final DibsRepository repository;
+
 
     // 상품 게시글 등록
     @PostMapping("/product")

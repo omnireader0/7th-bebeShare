@@ -54,13 +54,21 @@ public class IndexController {
         return "product/detail";
     }
 
+
     @GetMapping("/product/register")
-    public String registerProduct(Model model) {
+    public String registerProduct(Model model ,  @LoginUser SessionUser user) {
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
         return "product/register";
     }
 
     @GetMapping("/user/mypage")
     public String mypage(Model model ,  @LoginUser SessionUser user) {
+        if (user != null) {
+
+            model.addAttribute("userName", user.getName());
+        }
         model.addAttribute("user", userService.findById(user.getId()));
         return "user/mypage";
     }

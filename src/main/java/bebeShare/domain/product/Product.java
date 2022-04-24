@@ -36,7 +36,6 @@ public class Product extends BaseEntity {
 
     private String productName;
 
-  
     private String productContent;
 
     private String productImage1;
@@ -63,7 +62,8 @@ public class Product extends BaseEntity {
 
 
     @Builder
-    public Product(User user, String productName, String productContent,String productImage1, String productImage2, String productImage3, String productStatus, String productCategory ,String deleteYn
+    public Product(User user, String productName, String productContent,String productImage1,
+                   String productImage2, String productImage3, String productStatus, String productCategory ,String deleteYn
     ,Long shareId) {
 
         this.user = user;
@@ -76,7 +76,6 @@ public class Product extends BaseEntity {
         this.productCategory = productCategory;
         this.deleteYn = deleteYn;
         this.shareId = shareId;
-
     }
 
     public void addUser(User user){

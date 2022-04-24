@@ -7,13 +7,13 @@ spring:
 
   # DB
   datasource:
-    url: jdbc:h2:tcp://localhost/~/bebeShare
-    driver-class-name: org.h2.Driver
-    username: sa
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mariadb://211.105.66.96:3306/bebeShare
-#    username: bebeShare
-#    password: fW1*n[IQQM
+#    url: jdbc:h2:tcp://localhost/~/bebeShare
+#    driver-class-name: org.h2.Driver
+#    username: sa
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://211.105.66.96:3306/bebeShare
+    username: bebeShare
+    password: fW1*n[IQQM
   # JPA
   jpa:
     generate-ddl: true
@@ -33,4 +33,7 @@ spring:
       store-type: redis
       redis:
         flush-mode: on_save
+
+
+
 

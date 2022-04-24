@@ -9,13 +9,9 @@
 
     <th:block layout:fragment="css">
         <style th:inline="css">
-            .center-img {
-                height: 500px;
-                width: 400%;
-            }
-
-            .card-text {
-                height: 300px;
+            .form-check-inline{
+                width: auto;
+                margin : .5rem;
             }
         </style>
     </th:block>
@@ -24,13 +20,45 @@
 
     <th:block layout:fragment="script">
         <script type="text/javascript" th:inline="javascript">
-            function uploadImage(id) {
+
+            $(function () {
+
+                const p_trans = {};
+                let cHtml = '';
+                p_trans.code = "100";
+
+                $.ajax({
+                    dataType: 'json',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: '/api/v1/categories',
+                    data: JSON.stringify(p_trans),
+                    success: function (data) {
+                        const categories = data;
+
+                        for (var i = 0; i < categories.length; i++) {
+                            cHtml += '<input type="radio" class="form-check-inline" name="category" value="' + categories[i].code + '">'
+                            cHtml += categories[i].codeName;
+                        }
+
+                        $('#categories').html(cHtml)
+
+                    },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
+
+
+            });
+
+            function uploadImage(idx) {
                 var result;
                 $.ajax({
                     url: '/upload',
                     type: "POST",
                     enctype: 'multipart/form-data',
-                    data: new FormData($("#" + id)[0]),
+                    data: new FormData($("#form-images" + idx)[0]),
                     contentType: false,
                     processData: false,
                     async: false,
@@ -44,40 +72,47 @@
                 return result;
             }
 
+
+
+
             /* 상품 정보 DB 저장 */
-            function createProduct(){
-                var user = [[ ${user} ]];
+            async function createProduct() {
+
+                var user = [[ ${user}]];
                 var title = document.querySelector('#form-title').value;
                 var contents = document.querySelector('#form-contents').value;
-                var category = $("input:radio[name='form-tag']:checked").val();
-                var productImage1 = uploadImage("form-images1");
-                var productImage2 = uploadImage("form-images2");
-                var productImage3 = uploadImage("form-images3");
+                var category = $("input:radio[name='category']:checked").val();
+                var productImage1 = uploadImage("1");
+                var productImage2 = uploadImage("2");
+                var productImage3 = uploadImage("3");
+
+
+
                 data = {
-                    'user' : user,
-                    'productName' : title,
-                    'productContent' :contents,
-                    'productImage1' : productImage1,
-                    'productImage2' : productImage2,
-                    'productImage3' : productImage3,
-                    'productCategory' : category,
-                    'productStatus' : "S",
-                    'deleteYn' : "N"
+                    'user': user,
+                    'productName': title,
+                    'productContent': contents,
+                    'productImage1': productImage1,
+                    'productImage2': productImage2,
+                    'productImage3': productImage3,
+                    'productCategory': category,
+                    'productStatus': "N",
+                    'deleteYn': "N"
                 };
                 $.ajax({
-                    url : '/api/v1/product',
-                    type : "POST",
+                    url: '/api/v1/product',
+                    type: "POST",
                     contentType: 'application/json',
-                    data : JSON.stringify(data),
-                    async : true,
-                    success : function(result){
-                        alert(result);
+                    data: JSON.stringify(data),
+                    async: true,
+                    success: function () {
+                        window.location.replace("/");
                     },
-                    error: function(request,error) {
-                        // alert("값을 가져오지 못했습니다.");
-                        alert("code : "+request.status+" \n "
-                            +"message : "+request.responseText+"\n"
-                            +"error: "+error)
+                    error: function (request, error) {
+                        alert("값을 가져오지 못했습니다.");
+                        // alert("code : " + request.status + " \n "
+                        //     + "message : " + request.responseText + "\n"
+                        //     + "error: " + error)
                     }
                 })
             }
@@ -99,14 +134,11 @@
                         <label for="form-title">제목</label>
                         <input type="text" class="form-control" id="form-title" name="title" placeholder="제목을 입력해주세요." required>
                     </div>
-                    <!-- select tags use toggle button -->
+
+                    <!-- select category use radio button -->
                     <div class="form-group mb-4">
-                        <!-- select tags checkbox-->
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="form-tag" value="여행">여행
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="form-tag" value="여행">운동
+                        <div class="form-check-inline" style="display:inline-block"  id="categories" name="categories" required>
+
                         </div>
                         <!-- tags -->
                     </div>
@@ -117,22 +149,26 @@
                     </div>
                     <!-- images -->
                     <div class="form-group mb-4">
-                        <label >이미지</label>
-                        <form class="image-group" id="form-images1" method="post" enctype="multipart/form-data" >
+                        <label>이미지</label>
+                        <form class="image-group" id="form-images1" method="post" enctype="multipart/form-data" accept=“image/*” required>
                             <input id="image1" type="file" name="image"/>
                         </form>
-                        <form class="image-group" id="form-images2" method="post" enctype="multipart/form-data" >
+                        <form class="image-group" id="form-images2" method="post" enctype="multipart/form-data" accept=“image/*”>
                             <input id="image2" type="file" name="image"/>
                         </form>
-                        <form class="image-group" id="form-images3" method="post" enctype="multipart/form-data" >
+                        <form class="image-group" id="form-images3" method="post" enctype="multipart/form-data" accept=“image/*”>
                             <input id="image3" type="file" name="image"/>
                         </form>
                         <!-- images -->
                     </div>
                     <!-- 등록 취소 버튼 in center -->
                     <div class="form-group d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" id="post-cancel" onclick="location.href='/'">취소</button>
-                        <button type="submit" class="btn btn-primary" id="post-submit" th:onclick="'javascript:createProduct()'">등록</button>
+                        <button type="button" class="btn btn-secondary" id="post-cancel" onclick="location.href='/'">
+                            취소
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="post-submit"
+                                th:onclick="'javascript:createProduct()'">등록
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 package bebeShare.service;
 
+import bebeShare.domain.user.User;
 import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import com.google.cloud.storage.Bucket;
@@ -15,20 +16,18 @@ import static java.util.Objects.hash;
 @Slf4j
 @Service
 public class ImageService {
-    public static String createImage(byte[] image){
+    public static String createImage(byte[] image, User user){
         Bucket bucket = StorageClient.getInstance().bucket();
         //Image 저장 위치를 선언
-        String blob = "products/images"+hash(image);
-        log.info("blob = {}",blob);
+        String blob = "products/images/"+user.getId()+"/"+hash(image);
+
         try{
             // 이미 존재하면 파일 삭제
             if(bucket.get(blob) != null){
-                System.out.println("bucket.get(blob) = " + bucket.get(blob));
                 bucket.get(blob).delete();
             }
             // 파일을 Bucket에 저장
             bucket.create(blob,image);
-            System.out.println("blob = " + blob);
         // 상품 Image 위치 리턴
         return blob;
         }catch(Exception e){

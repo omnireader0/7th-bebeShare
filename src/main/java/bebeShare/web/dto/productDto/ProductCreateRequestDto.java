@@ -2,7 +2,6 @@ package bebeShare.web.dto.productDto;
 
 import bebeShare.domain.product.Product;
 import bebeShare.domain.user.User;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

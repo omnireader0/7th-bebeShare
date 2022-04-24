@@ -20,7 +20,7 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp firebaseApp() throws IOException{
         log.info("Initializing Firebase.");
-        FileInputStream serviceAccount = new FileInputStream("C:\\Users\\ltwy0\\OneDrive\\바탕 화면\\새 폴더\\7th-bebeShare\\src\\main\\java\\bebeShare\\config\\firebase\\firebase.json");
+        FileInputStream serviceAccount = new FileInputStream("firebase.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -30,11 +30,6 @@ public class FirebaseConfig {
                 FirebaseApp app = FirebaseApp.initializeApp(options);
                 log.info("FirebaseApp initialized" + app.getName());
                 return app;
-    }
-
-    @Bean
-    public FirebaseAuth firebaseAuth() throws IOException{
-        return FirebaseAuth.getInstance(firebaseApp());
     }
 
     @Bean

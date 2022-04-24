@@ -13,8 +13,8 @@ public class QMemberCommentResponseDto extends ConstructorExpression<MemberComme
 
     private static final long serialVersionUID = 670342161L;
 
-    public QMemberCommentResponseDto(com.querydsl.core.types.Expression<Long> commentId, com.querydsl.core.types.Expression<String> productName, com.querydsl.core.types.Expression<String> commentContent, com.querydsl.core.types.Expression<java.time.LocalDateTime> insertDt) {
-        super(MemberCommentResponseDto.class, new Class<?>[]{long.class, String.class, String.class, java.time.LocalDateTime.class}, commentId, productName, commentContent, insertDt);
+    public QMemberCommentResponseDto(com.querydsl.core.types.Expression<Long> commentId, com.querydsl.core.types.Expression<String> productName, com.querydsl.core.types.Expression<String> commentContent, com.querydsl.core.types.Expression<String> productImage, com.querydsl.core.types.Expression<java.time.LocalDateTime> insertDt) {
+        super(MemberCommentResponseDto.class, new Class<?>[]{long.class, String.class, String.class, String.class, java.time.LocalDateTime.class}, commentId, productName, commentContent, productImage, insertDt);
     }
 
 }

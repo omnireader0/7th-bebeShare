@@ -13,8 +13,8 @@ public class QProductInfoResponseDto extends ConstructorExpression<ProductInfoRe
 
     private static final long serialVersionUID = 248330593L;
 
-    public QProductInfoResponseDto(com.querydsl.core.types.Expression<Long> ProductId, com.querydsl.core.types.Expression<String> Productname, com.querydsl.core.types.Expression<String> ProductImage1, com.querydsl.core.types.Expression<java.time.LocalDateTime> InsertDt) {
-        super(ProductInfoResponseDto.class, new Class<?>[]{long.class, String.class, String.class, java.time.LocalDateTime.class}, ProductId, Productname, ProductImage1, InsertDt);
+    public QProductInfoResponseDto(com.querydsl.core.types.Expression<Long> ProductId, com.querydsl.core.types.Expression<String> Productname, com.querydsl.core.types.Expression<String> ProductImage1, com.querydsl.core.types.Expression<Long> dibsId, com.querydsl.core.types.Expression<java.time.LocalDateTime> InsertDt) {
+        super(ProductInfoResponseDto.class, new Class<?>[]{long.class, String.class, String.class, long.class, java.time.LocalDateTime.class}, ProductId, Productname, ProductImage1, dibsId, InsertDt);
     }
 
 }

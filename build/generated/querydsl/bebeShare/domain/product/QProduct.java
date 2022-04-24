@@ -32,6 +32,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath deleteYn = createString("deleteYn");
 
+    public final ListPath<bebeShare.domain.like.Dibs, bebeShare.domain.like.QDibs> dibs = this.<bebeShare.domain.like.Dibs, bebeShare.domain.like.QDibs>createList("dibs", bebeShare.domain.like.Dibs.class, bebeShare.domain.like.QDibs.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited

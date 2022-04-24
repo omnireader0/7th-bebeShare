@@ -68,5 +68,11 @@ public class CommentsService {
         return  commentRepository.findByProductId(commentsRequest, pageable);
     }
 
-
+    @Transactional
+    public Long updateByCommentId(CommentUpdateRequestsDto updateRequestsDto) {
+        Comment entity = commentRepository.findById(updateRequestsDto.getCommentId()).orElseThrow(
+                () -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+        );
+        return  commentRepository.updateByCommentId(updateRequestsDto);
+    }
 }

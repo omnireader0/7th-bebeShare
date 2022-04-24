@@ -24,29 +24,39 @@
     <title>배배쉐어</title>
     <script>
 
+        let comments;
+
         $(function () {
+
 
             selCodes();
             selComments();
+            productStatus();
 
             $("input:checkbox[name=category]").click(function () { //체크박스 동작 이벤트
-                    $("input:checkbox[name=category]").prop('checked',false)
+                    $("input:checkbox[name=category]").prop('checked', false)
                     $("input:checkbox[name=category]").removeClass('checked')
-                    $(this).prop('checked',true)
+                    $(this).prop('checked', true)
                     $(this).addClass('checked')
                 }
             );
 
 
             //비로그인시 댓글 입력창 상품 수정 삭제를 안보야됨
-            if(!localStorage.getItem("userId")){
+            if (!localStorage.getItem("userId")) {
                 $('#productStatus').hide()
                 $('#commentInput').hide()
             }
             // 자기가등록한 상품이 아닐시 상품삭제  변경 버튼은 숨겨야된다
-            if(localStorage.getItem("userId") !== $('#authorId').val()){
-                $('#productStatus').hide()
+            if (localStorage.getItem("userId") !== $('#authorId').val()) {
+                $('#updateProduct').hide();
+                $('#deleteProdudct').hide();
+                $('#productName').attr("readonly","readonly");
+                $('#productContent').attr("readonly","readonly");
+                $('.form-check-input').attr("disabled","disabled");
             }
+
+            $('#commentImg').attr("src",localStorage.getItem("userPicture"));
         });
 
         function selCodes() {
@@ -137,9 +147,6 @@
         }
 
 
-
-
-
         function selComments() {
 
             $('#comments').empty();
@@ -155,53 +162,18 @@
                 type: "POST",
                 contentType: "application/json;charset=utf-8",
                 url: '/api/v1/comments',
+                async: false,
                 data: JSON.stringify(p_trans),
                 success: function (data) {
                     console.log("댓글리스트:{}", data);
-                    const comments = data.content;
-
-                    for (var i = 0; i < comments.length; i++) {
-                        cHtml += '<div class="card">';
-                        cHtml += '<div class="card-body">';
-                        cHtml += '  <div class="row">';
-                        cHtml += '      <div class="col-md-2">';
-                        cHtml += '          <img src="'+comments[i].picture+'" class="rounded-circle img-fluid" alt="" style="width: 118.66px;height: 118.66px;">';
-                        cHtml += '      </div>';
-
-
-                                  if(comments[i].userId == $('#authorId').val()){
-                                      cHtml += '              <div class="col-md-10">';
-                                      cHtml += '                <div class="row">';
-                                      cHtml += '                    <div class="col-md-10">';
-                                      cHtml += '                        <textarea class="form-control" rows="3">'+comments[i].commentContent+'</textarea>';
-                                      cHtml += '                    </div>';
-                                      cHtml += '                    <div class="col-md-2">';
-                                      cHtml += '                        <button type="button" class="btn btn-outline-secondary" onclick="javascript:updateComment('+comments[i].commentId+')">수정</button>';
-                                      cHtml += '                        <button type="button" class="btn btn-danger" onclick="javascript:deleteComment('+comments[i].commentId+')">삭제</button>';
-                                      cHtml += '                        <span style="font-size: 12px;">'+comments[i].insertDt+'</span>';
-                                      cHtml += '                    </div>';
-                                  }else{
-                                      cHtml += '              <div class="col-md-10">';
-                                      cHtml += '              <div class="row">';
-                                      cHtml += '              <div class="col-md-10 justify-content-center">';
-                                      cHtml += '                  <p>'+comments[i].commentContent+'</p>';
-                                      cHtml += '              </div>';
-                                      cHtml += '              <div class="col-md-2">';
-                                      cHtml += '                    <button type="button" class="btn btn-outline-secondary" style="display: none" id="'+comments[i].userId+'">수정</button>';
-                                      cHtml += '                    <button type="button" class="btn btn-danger" style="display: none" id="'+comments[i].userId+'">삭제</button>';
-                                      cHtml += '                    <button type="button" class="btn btn-primary p-2" id="shareBtn">나눔하기</button>';
-                                      cHtml += '                    <span style="font-size: 12px;">'+comments[i].insertDt+'</span>';
-                                      cHtml += '              </div>';
-                                  }
-                        cHtml += '              </div>';
-                        cHtml += '              </div>';
-                        cHtml += '              </div>';
-                        cHtml += '              </div>';
-                        cHtml += '              </div>';
-
+                    comments = data.content;
+                    //글쓴이랑 접속한 아이디랑 같으면
+                    if (localStorage.getItem('userId') == $('#authorId').val()) {
+                        $('#comments').html(authorRender(comments));
+                    } else {
+                        $('#comments').html(otherRender(comments, localStorage.getItem('userId')));
                     }
 
-                    $('#comments').html(cHtml);
 
                 },
                 error: function (e) {
@@ -212,12 +184,37 @@
         }
 
 
-        function updateComment(commentId,content) {
+        function insertCommnet() {
 
             const p_trans = {};
             let cHtml = '';
-            p_trans.commentId = commentId;
-            p_trans.commentContent = content;
+            p_trans.productId = $('#productId').val();
+            p_trans.memberId = localStorage.getItem("userId");
+            p_trans.commentContent = $('#insertCommentContent').val();
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/comments/'+$('#productId').val(),
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("댓글이 등록되었습니다.");
+                    selComments();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function updateComment(index) {
+
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.commentId = comments[index].commentId;
+            p_trans.commentContent = $('#content' + index).val();
 
             $.ajax({
                 dataType: 'json',
@@ -250,13 +247,249 @@
                 async: false,
                 data: JSON.stringify(p_trans),
                 success: function (data) {
-                    alert("댓글이 수정되었습니다.");
+                    alert("댓글이 삭제 되었습니다.");
                     selComments();
                 },
                 error: function (e) {
                     console.log(e.message);
                 }
             });
+        }
+
+        function addComments() {
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.page = $('.col-md-10 .card-body').length - 1;
+            p_trans.size = 5;
+            p_trans.productId = $('#productId').val()
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/comments',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("댓글리스트:{}", data);
+                    comments = data.content;
+                    if (localStorage.getItem('userId') == $('#authorId').val()) {
+                        $('#comments').append(authorRender(comments));
+                    } else {
+                        $('#comments').append(otherRender(comments, localStorage.getItem('userId')));
+                    }
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+
+        function authorRender(comments) {
+
+            let cHtml = '';
+
+            for (var i = 0; i < comments.length; i++) {
+                cHtml += '<div class="card">';
+                cHtml += '<div class="card-body">';
+                cHtml += '  <div class="row">';
+                cHtml += '      <div class="col-md-2">';
+                cHtml += '          <img src="' + comments[i].picture + '" class="rounded-circle img-fluid" alt="" style="width: 118.66px;height: 118.66px;">';
+                cHtml += '      </div>';
+
+
+                if($('#shareId').val() != ''){
+                     cHtml += '              <div class="col-md-10">';
+                     cHtml += '              <div class="row">';
+                     cHtml += '              <div class="col-md-10 justify-content-center">';
+                     cHtml += '                  <p>' + comments[i].commentContent + '</p>';
+                     cHtml += '              </div>';
+                     cHtml += '              <div class="col-md-2">';
+                     cHtml += '                    <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                     cHtml += '              </div>';
+                 }
+
+
+                else if (comments[i].userId == $('#authorId').val()) {
+                    cHtml += '              <div class="col-md-10">';
+                    cHtml += '                <div class="row">';
+                    cHtml += '                    <div class="col-md-10">';
+                    cHtml += '                        <textarea class="form-control" rows="3" id="' + 'content' + i + '">' + comments[i].commentContent + '</textarea>';
+                    cHtml += '                    </div>';
+                    cHtml += '                    <div class="col-md-2">';
+                    cHtml += '                        <button type="button" class="btn btn-outline-secondary" onclick="javascript:updateComment(' + i + ')">수정</button>';
+                    cHtml += '                        <button type="button" class="btn btn-danger" onclick="javascript:deleteComment(' + comments[i].commentId + ')">삭제</button>';
+                    cHtml += '                        <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                    cHtml += '                    </div>';
+                } else {
+                    cHtml += '              <div class="col-md-10">';
+                    cHtml += '              <div class="row">';
+                    cHtml += '              <div class="col-md-10 justify-content-center">';
+                    cHtml += '                  <p>' + comments[i].commentContent + '</p>';
+                    cHtml += '              </div>';
+                    cHtml += '              <div class="col-md-2">';
+                    cHtml += '                    <button type="button" class="btn btn-primary p-2" id="shareBtn" onclick="javascript:approveShare('+comments[i].userId+')">나눔하기</button>';
+                    cHtml += '                    <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                    cHtml += '              </div>';
+                }
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+            }
+
+            return cHtml;
+        }
+
+        function otherRender(comments, otherId) {
+
+            let cHtml = '';
+
+            for (var i = 0; i < comments.length; i++) {
+                cHtml += '<div class="card">';
+                cHtml += '<div class="card-body">';
+                cHtml += '  <div class="row">';
+                cHtml += '      <div class="col-md-2">';
+                cHtml += '          <img src="' + comments[i].picture + '" class="rounded-circle img-fluid" alt="" style="width: 118.66px;height: 118.66px;">';
+                cHtml += '      </div>';
+
+
+                if(comments[i].userId === comments[i].shareId){
+                    cHtml += '              <div class="col-md-10">';
+                    cHtml += '              <div class="row">';
+                    cHtml += '              <div class="col-md-10 justify-content-center">';
+                    cHtml += '                  <p>' + comments[i].commentContent + '</p>';
+                    cHtml += '              </div>';
+                    cHtml += '              <div class="col-md-2">';
+                    cHtml += '                    <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                    cHtml += '                        <button type="button" class="btn btn-outline-secondary" onclick="javascript:completeShare()">승인</button>';
+                    cHtml += '                        <button type="button" class="btn btn-danger" onclick="javascript:rejectShare()">거부</button>';
+                    cHtml += '              </div>';
+                }
+
+
+                else if (comments[i].userId == otherId) {
+                    cHtml += '              <div class="col-md-10">';
+                    cHtml += '                <div class="row">';
+                    cHtml += '                    <div class="col-md-10">';
+                    cHtml += '                        <textarea class="form-control" rows="3" id="' + 'content' + i + '">' + comments[i].commentContent + '</textarea>';
+                    cHtml += '                    </div>';
+                    cHtml += '                    <div class="col-md-2">';
+                    cHtml += '                        <button type="button" class="btn btn-outline-secondary" onclick="javascript:updateComment(' + i + ')">수정</button>';
+                    cHtml += '                        <button type="button" class="btn btn-danger" onclick="javascript:deleteComment(' + comments[i].commentId + ')">삭제</button>';
+                    cHtml += '                        <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                    cHtml += '                    </div>';
+                } else {
+                    cHtml += '              <div class="col-md-10">';
+                    cHtml += '              <div class="row">';
+                    cHtml += '              <div class="col-md-10 justify-content-center">';
+                    cHtml += '                  <p>' + comments[i].commentContent + '</p>';
+                    cHtml += '              </div>';
+                    cHtml += '              <div class="col-md-2">';
+                    cHtml += '                    <span style="font-size: 12px;">' + comments[i].insertDt + '</span>';
+                    cHtml += '              </div>';
+                }
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+                cHtml += '              </div>';
+            }
+
+            return cHtml;
+        }
+
+
+
+        function completeShare() {
+
+            const p_trans = {};
+            p_trans.productId =$('#productId').val();
+
+            let cHtml = '';
+
+
+            $.ajax({
+                dataType: 'json',
+                type: "PATCH",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products/completeShare',
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("나눔하기 완료");
+                    location.reload();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function rejectShare() {
+
+            const p_trans = {};
+            p_trans.productId =$('#productId').val();
+
+            let cHtml = '';
+
+            $.ajax({
+                dataType: 'json',
+                type: "PATCH",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products/rejectShare',
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("나눔하기 거절 완료");
+                    location.reload();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function approveShare(id) {
+
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.productId =$('#productId').val();
+            p_trans.shareId =id;
+
+            $.ajax({
+                dataType: 'json',
+                type: "PATCH",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products/approveShare',
+                async: false,
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    alert("나눔하기 완료");
+                    location.reload();
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function productStatus(){
+            if($('#productStatus').val() == 'N' || $('#productStatus').val() == 'I'){
+                $('#sharingProduct').removeClass("d-none");
+                $('#completeShare').addClass("d-none");
+                return;
+            }
+
+            $('#completeShare').removeClass("d-none");
+            $('#sharingProduct').addClass("d-none");
+            $('#updateProduct').hide();
+            $('#deleteProdudct').hide();
+            $('.card-body button').hide();
+
+
+            return;
         }
     </script>
 </head>
@@ -266,6 +499,8 @@
     <div class="container p-5">
         <input type="hidden" th:value="${product.productId}" id="productId">
         <input type="hidden" th:value="${product.user.id}" id="authorId">
+        <input type="hidden" th:value="${product.shareId}" id="shareId">
+        <input type="hidden" th:value="${product.productStatus}" id="productStatus">
         <!-- image slider -->
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -337,26 +572,21 @@
                     </div>
                     <!-- 나눔 받기 버튼 -->
                     <!-- 글 수정 삭제 -->
-                    <div class="row justify-content-center" id="productStatus">
-                        <div class="col-md-2">
+                    <div class="row justify-content-center" >
+                        <div class="col-md-2" id="sharingProduct">
                             <span> 나눔 진행중 </span>
                         </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-primary" onclick="javascript:updateProduct()">글 수정</button>
+                        <div class="row text-center d-none" id="completeShare">
+                            <span> 나눔 완료</span>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-primary" onclick="javascript:deleteProduct()">글 삭제
+                            <button type="button" class="btn btn-primary" id="updateProduct" onclick="javascript:updateProduct()">글 수정
                             </button>
                         </div>
-                    </div>
-                    <!-- 글 수정 삭제-->
-                    <!-- 나눔 진행중 (비로그인)-->
-                    <div class="row text-center d-none">
-                        <span> 나눔 진행중</span>
-                    </div>
-                    <!-- 나눔 완료-->
-                    <div class="row text-center d-none">
-                        <span> 나눔 완료</span>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" id="deleteProdudct"  onclick="javascript:deleteProduct()">글 삭제
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -370,16 +600,16 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"
+                                <img id="commentImg" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"
                                      class="rounded-circle img-fluid" alt="">
                             </div>
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요."></textarea>
+                                        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요." id="insertCommentContent"></textarea>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-primary">입력</button>
+                                        <button type="button" class="btn btn-primary" onclick="insertCommnet()">입력</button>
                                     </div>
                                 </div>
                             </div>
@@ -392,77 +622,13 @@
         <!-- 댓글 리스트 -->
         <div class="row justify-content-center">
             <div class="col-md-10" id="comments">
-                <!-- 댓글 (작성자)-->
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"
-                                     class="rounded-circle img-fluid" alt="">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요."></textarea>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" class="btn btn-outline-secondary">수정</button>
-                                        <button type="button" class="btn btn-danger">삭제</button>
-                                        <span style="font-size: 12px;">2020-05-05</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 댓글 -->
-                <!-- 댓글 (글 작성자)-->
-<!--                <div class="card">-->
-<!--                    <div class="card-body">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-md-2">-->
-<!--                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"-->
-<!--                                     class="rounded-circle img-fluid" alt="">-->
-<!--                            </div>-->
-<!--                            <div class="col-md-10">-->
-<!--                                <div class="row">-->
-<!--                                    <div class="col-md-10 justify-content-center">-->
-<!--                                        <p>댓글 내용</p>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-2 justify-content-center">-->
-<!--                                        <button type="button" class="btn btn-primary p-2">나눔하기</button>-->
-<!--                                        <span style="font-size: 12px;">2020-05-05</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; 댓글 &ndash;&gt;-->
-<!--                &lt;!&ndash; 댓글 &ndash;&gt;-->
-<!--                <div class="card">-->
-<!--                    <div class="card-body">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-md-2">-->
-<!--                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg"-->
-<!--                                     class="rounded-circle img-fluid" alt="">-->
-<!--                            </div>-->
-<!--                            <div class="col-md-10">-->
-<!--                                <div class="row">-->
-<!--                                    <div class="col-md-10 justify-content-center">-->
-<!--                                        <p>댓글 내용</p>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-2 justify-content-center">-->
-<!--                                        <span style="font-size: 12px;">2020-05-05</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <!-- 댓글 -->
+
             </div>
         </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <button type="button" class="btn btn-link" onclick="addComments()">더보기</button>
     </div>
 </th:block>
 </html>

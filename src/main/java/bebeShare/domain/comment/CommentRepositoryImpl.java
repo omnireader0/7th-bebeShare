@@ -1,8 +1,7 @@
 package bebeShare.domain.comment;
 
-import bebeShare.web.dto.commentDto.CommentInfoResponseDto;
-import bebeShare.web.dto.commentDto.CommentsRequest;
-import bebeShare.web.dto.commentDto.QCommentInfoResponseDto;
+import bebeShare.web.dto.commentDto.*;
+import bebeShare.web.dto.productDto.RejectShareRequest;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,11 +37,13 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                         comment.commentStatus,
                         comment.user.picture,
                         comment.user.id,
+                        comment.product.shareId,
                         comment.createdDate.as("insertDt")
                 ))
                 .from(comment)
                 .where(
-                        commentProductIdEq(commentsRequest.getProductId())
+                        commentProductIdEq(commentsRequest.getProductId()),
+                        comment.deleteYn.eq("N")
                 )
                 .offset(pageable.getPageNumber())
                 .limit(pageable.getPageSize())
@@ -60,7 +61,17 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     }
 
+    @Override
+    public Long updateByCommentId(CommentUpdateRequestsDto updateRequestsDto) {
+        return queryFactory
+                .update(comment)
+                .set(comment.commentContent,updateRequestsDto.getCommentContent())
+                .where(comment.id.eq(updateRequestsDto.getCommentId()))
+                .execute();
+
+    }
+
     private BooleanExpression commentProductIdEq(Long proudctId) {
-        return proudctId == null ? comment.product.id.isNull() : product.product.id.eq(proudctId);
+        return proudctId == null ? comment.product.id.isNull() : comment.product.id.eq(proudctId);
     }
 }

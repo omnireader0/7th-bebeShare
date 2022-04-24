@@ -21,11 +21,8 @@ public class CommentApiController {
     private final CommentsService commentsService;
 
     // 상품 댓글 등록
-    @PostMapping("/{productId}/comments")
-    public CommentResponseDto save(@PathVariable Long productId, @RequestBody CommentSaveRequestsDto requestsDto,
-                                   @LoginUser SessionUser sessionUser) {
-        requestsDto.setProductId(productId);
-        requestsDto.setMemberId(sessionUser.getId());
+    @PostMapping("/{productId}")
+    public CommentResponseDto save( @RequestBody CommentSaveRequestsDto requestsDto) {
         return commentsService.save(requestsDto);
     }
 
@@ -39,7 +36,14 @@ public class CommentApiController {
     // 상품 댓글 수정
     @PatchMapping("")
     public CommentUpdateResponseDto update(@RequestBody CommentUpdateRequestsDto updateRequestsDto) {
-        return commentsService.update(updateRequestsDto);
+
+        Long updateCnt = commentsService.updateByCommentId(updateRequestsDto);
+
+        if(updateCnt != 0){
+            return new CommentUpdateResponseDto(updateRequestsDto.getCommentId());
+        }
+
+        return new CommentUpdateResponseDto();
     }
 
     // 상품 댓글 삭제

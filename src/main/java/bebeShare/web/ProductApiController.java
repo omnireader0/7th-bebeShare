@@ -41,7 +41,7 @@ public class ProductApiController {
 
     // 상품 게시글 수정
     @PatchMapping("/products")
-    public Long update(@RequestBody final ProductCreateRequestDto params) {
+    public Long update(@RequestBody ProductCreateRequestDto params) {
         return productService.update(params);
     }
 
@@ -51,6 +51,38 @@ public class ProductApiController {
         productService.delete(params);
 
         return params.getProductId();
+    }
+
+    // 상품 게시글 상태변경
+    @PatchMapping("/products/approveShare")
+    public ApproveShareProductResponse approveShare(@RequestBody ApproveShareProductRequest params) {
+        Long updateCnt = productService.approveShare(params);
+
+        if (updateCnt == 0) {
+            return new ApproveShareProductResponse();
+        }
+        return new ApproveShareProductResponse(params.getProductId());
+    }
+
+    // 나눔 완료
+    @PatchMapping("/products/completeShare")
+    public ApproveShareProductResponse completeShare(@RequestBody CompleteShareRequest params) {
+        Long updateCnt = productService.completeShare(params);
+
+        if (updateCnt == 0) {
+            return new ApproveShareProductResponse();
+        }
+        return new ApproveShareProductResponse(params.getProductId());
+    }
+    // 나눔 거절
+    @PatchMapping("/products/rejectShare")
+    public ApproveShareProductResponse rejectShare(@RequestBody RejectShareRequest params) {
+        Long updateCnt = productService.rejectShare(params);
+
+        if (updateCnt == 0) {
+            return new ApproveShareProductResponse();
+        }
+        return new ApproveShareProductResponse(params.getProductId());
     }
 
 }

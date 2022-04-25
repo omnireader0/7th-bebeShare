@@ -59,13 +59,18 @@ public class ProductService {
 
     // 상품 게시글 수정
     @Transactional
-    public Long update(final ProductCreateRequestDto params) {
+    public Long update( ProductCreateRequestDto productCreateRequestDto) {
 
-        Product entity = productRepository.findById(params.getProductId()).orElseThrow(()
+        productRepository.findById(productCreateRequestDto.getProductId()).orElseThrow(()
                 -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
 
-        entity.update(params);
-        return params.getProductId();
+        try {
+            return productRepository.updateProductDetail(productCreateRequestDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return 0L;
+        }
     }
 
 

@@ -13,4 +13,6 @@ public interface ProductRepositoryCustom {
     Long completeShare(CompleteShareRequest completeShareRequest);
 
     Long rejectShare(RejectShareRequest rejectShareRequest);
+
+    Long updateProductDetail(ProductCreateRequestDto productCreateRequestDto);
 }

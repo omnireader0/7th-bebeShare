@@ -88,9 +88,6 @@ public class Product extends BaseEntity {
         this.user = pro.getUser();
         this.productName = pro.getProductName();
         this.productContent = pro.getProductContent();
-        this.productImage2 = pro.getProductImage2();
-        this.productImage3 = pro.getProductImage3();
-        this.productImage1 = pro.getProductImage1();
         this.productStatus = pro.getProductStatus();
         this.productCategory = pro.getProductCategory();
     }

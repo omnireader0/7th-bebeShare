@@ -497,8 +497,9 @@
 
 <th:block layout:fragment="content">
     <div class="container p-5">
+
         <input type="hidden" th:value="${product.productId}" id="productId">
-        <input type="hidden" th:value="${product.user.id}" id="authorId">
+        <input type="hidden" th:value="${product.user?.Id}" id="authorId">
         <input type="hidden" th:value="${product.shareId}" id="shareId">
         <input type="hidden" th:value="${product.productStatus}" id="productStatus">
         <!-- image slider -->

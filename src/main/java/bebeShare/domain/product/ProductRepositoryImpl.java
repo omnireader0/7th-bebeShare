@@ -90,6 +90,17 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public Long updateProductDetail(ProductCreateRequestDto productCreateRequestDto) {
+        return queryFactory
+                .update(product)
+                .set(product.productName , productCreateRequestDto.getProductName())
+                .set(product.productContent, productCreateRequestDto.getProductContent())
+                .set(product.productCategory, productCreateRequestDto.getProductCategory())
+                .where(product.id.eq(productCreateRequestDto.getProductId()))
+                .execute();
+    }
+
 
     private BooleanExpression productCategoryEq(String categoryCode) {
         return hasText(categoryCode) ? product.productCategory.eq(categoryCode) : null;

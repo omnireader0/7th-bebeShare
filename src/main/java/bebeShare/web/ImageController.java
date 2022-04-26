@@ -4,6 +4,7 @@ import bebeShare.domain.user.User;
 import bebeShare.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,8 @@ public class ImageController {
     }
 
 
-    @GetMapping("/products/images/{userId}/{fileName}")
+    @ResponseBody
+    @GetMapping(value="/products/images/{userId}/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] imageDownload(@PathVariable("userId") String userid, @PathVariable("fileName") String filename) {
         System.out.println("ImageController.imageDownload");
         log.info("userId={}",userid);

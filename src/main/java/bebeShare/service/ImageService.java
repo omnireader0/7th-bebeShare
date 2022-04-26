@@ -41,7 +41,6 @@ public class ImageService {
 
     public byte[] getImage(String userid,String filename){
         String bucketPath = "products/images/"+userid+"/"+filename;
-        log.info("userid={}",userid);
         return bucket.get(bucketPath).getContent();
     }
 }

@@ -30,8 +30,6 @@ public class ImageController {
     @ResponseBody
     @GetMapping(value="/products/images/{userId}/{fileName}",produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] imageDownload(@PathVariable("userId") String userid, @PathVariable("fileName") String filename) {
-        System.out.println("ImageController.imageDownload");
-        log.info("userId={}",userid);
         return imageService.getImage(userid,filename);
     }
 }

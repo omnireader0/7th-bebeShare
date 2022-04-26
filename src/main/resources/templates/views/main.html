@@ -151,8 +151,7 @@
 
                         pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
                         pHtml += '  <div class="card">';
-                        // pHtml += '      <img class="card-img-top" th:src="@{/' + products[i].productImage1 + '}" alt="Card image cap" >';
-                        pHtml += '      <img class="card-img-top" th:src="@{/{image}(image=${products[i].productImage1})}" alt="Card image cap" >';
+                        pHtml += '      <img class="card-img-top" src="/' + products[i].productImage1 + '" alt="Card image cap" >';
                         pHtml += '          <div class="card-body">';
                         pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
                         pHtml += '              <div class="d-flex justify-content-between ">';

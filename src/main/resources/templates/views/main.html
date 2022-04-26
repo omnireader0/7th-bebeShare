@@ -121,7 +121,7 @@
         }
 
         function selProducts() {
-            $('#proudcts').empty();
+            $('#products').empty();
 
             const p_trans = {};
             let pHtml = '';
@@ -146,7 +146,7 @@
 
                         pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
                         pHtml += '  <div class="card">';
-                        pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
+                        pHtml += '      <img class="card-img-top" src="/' + products[i].productImage1 + '" alt="Card image cap" >';
                         pHtml += '          <div class="card-body">';
                         pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
                         pHtml += '              <div class="d-flex justify-content-between ">';
@@ -161,7 +161,7 @@
                     }
 
 
-                    $('#proudcts').html(pHtml);
+                    $('#products').html(pHtml);
 
                     $('.card-text button i').click(function () { //좋아요 버튼 누를 시 이벤트 동작
                         console.log($(this).attr('like'))
@@ -224,7 +224,7 @@
                         pHtml += '  </div>';
                         pHtml += '</div>';
                     }
-                    $('#proudcts').append(pHtml);
+                    $('#products').append(pHtml);
 
                     $('.card-text button i').click(function () {
                             console.log($(this).attr('like'))
@@ -326,7 +326,7 @@
         <!-- 카드 리스트 -->
         <div class="row d-flex justify-content-center" style="margin-top: 20px;">
             <div class="col-md-12">
-                <div class="row" id="proudcts">
+                <div class="row" id="products">
 
                 </div>
             </div>

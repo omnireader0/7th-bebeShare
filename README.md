@@ -37,7 +37,7 @@
 
 ## 개발 후기
 
-[유진](https://sebiblog.tistory.com/36#%F-%-F%--%--%--%EB%A-%--%ED%--%AC)
+[유진후기](https://sebiblog.tistory.com/36#%F-%-F%--%--%--%EB%A-%--%ED%--%AC)
 
 
 ## 개발 기간

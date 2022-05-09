@@ -35,6 +35,10 @@
 
 <br>
 
+## 개발 후기
+
+[유진후기](https://sebiblog.tistory.com/36#%F-%-F%--%--%--%EB%A-%--%ED%--%AC)
+
 
 
 ## 개발 기간
@@ -81,10 +85,6 @@
 ![db800x715](https://user-images.githubusercontent.com/48271665/162228879-9fa529cc-c351-4397-92c7-673392d27cbf.png)
 
 
-
-## 개발 후기
-
-[유진](https://sebiblog.tistory.com/36#%F-%-F%--%--%--%EB%A-%--%ED%--%AC)
 
 
 

@@ -25,7 +25,7 @@
 
 ## 팀원 소개
 
-|             [기준](https://github.com/superkkj)              |              [태기](https://github.com/TevLee)               |            [유진](https://github.com/omnireader0)            |
+|             [k](https://github.com/superkkj)              |              [t](https://github.com/TevLee)               |            [y](https://github.com/omnireader0)            |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | <img src="https://res.cloudinary.com/divncmfka/image/upload/v1645906082/me_bvddac.jpg" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/69510442/156530657-0bf8a79c-232b-4fd4-b10b-1f2c080d2aa3.png" width="150" height="150"> | <img src="https://res.cloudinary.com/divncmfka/image/upload/v1645950212/%E1%84%89%E1%85%A5%E1%86%AB%E1%84%92%E1%85%B4%E1%84%82%E1%85%B5%E1%86%B7_yr5abm.jpg" width="150" height="150"> |
 |                           BackEnd                            |                           BackEnd                            |                           BackEnd                            |
